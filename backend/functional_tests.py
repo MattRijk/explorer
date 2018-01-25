@@ -3,11 +3,13 @@ from selenium import webdriver
 import requests
 
 
-class DashboardTestCase(LiveServerTestCase):
+class UserAdminTestCase(LiveServerTestCase):
+
     def setUp(self):
         self.browser = webdriver.PhantomJS('/usr/local/bin/phantomjs')
         self.browser.set_window_size(1120, 550)
         self.response = requests.get(self.live_server_url + '/backend/')
+
     def test_a_user_goes_to_the_signup_page(self):
         signup = requests.get(self.live_server_url + '/signup/')
         self.assertIn('signup', str(signup.content))
@@ -43,6 +45,8 @@ class DashboardTestCase(LiveServerTestCase):
         self.assertIn('kuser', self.browser.page_source)
         self.assertIn('Sign Out', self.browser.page_source)
 
-
     def TearDown(self):
         self.browser.close()
+
+
+

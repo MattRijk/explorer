@@ -13,10 +13,22 @@
     <p>{{ user.get_username }} is logged in.</p>
 {% endif %}
 
+
+<div>
+    <b>Categories</b>
+    {% for category in categories %}
+        <div>
+
+            {{ category.title }}
+            <a href="{% url 'backend:editCategory' slug=category.slug %}">Edit</a>
+            <a href="">Delete</a>
+        </div>
+    {% endfor %}
+</div>
+<br>
 {% if user.is_superuser %}
 <table>
- SuperUsers
-
+ <b>SuperUsers</b>
   <tr>
     <th>Username</th>
     <th>Email Address</th>
@@ -30,8 +42,7 @@
 </table>
 <br/>
 <table>
- Active Users
-
+  <b>Active Users</b>
   <tr>
     <th>Username</th>
     <th>Email Address</th>
@@ -42,8 +53,8 @@
   <tr>
     <td>{{ user.username }}</td>
     <td>{{ user.email }} </td>
-    <td><a href="{% url 'backend:edit' pk=user.pk %}">Edit</a></td>
-    <td><a href="{% url 'backend:delete' pk=user.pk %}">Delete</a></td>
+    <td><a href="{% url 'backend:editUser' pk=user.pk %}">Edit</a></td>
+    <td><a href="{% url 'backend:deleteUser' pk=user.pk %}">Delete</a></td>
   </tr>
 {% endfor %}
 </table>
