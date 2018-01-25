@@ -10,12 +10,8 @@ class IndexPageTestCase(LiveServerTestCase):
         self.response = requests.get(self.live_server_url + '/')
         self.page = str(self.response.content)
 
-    # user should see index page text when on to the home page
     def test_title_on_index_page(self):
         self.assertIn('home page',self.page)
-
-
-
 
     def TearDown(self):
         self.browser.close()

@@ -35,9 +35,9 @@ def edit_category(request, slug):
         return redirect('backend:index')
     return render(request, template_name='category_form.html', context={'form':form})
 
-# def delete_user(request, slug):
-#     slug = get_object_or_404(Category, slug=slug)
-#     if request.method == 'POST':
-#         slug.delete()
-#         return redirect('backend:index')
-#     return render(request, 'category_delete.html', {'object': slug})
+def delete_category(request, slug):
+    slug = get_object_or_404(Category, slug=slug)
+    if request.method == 'POST':
+        slug.delete()
+        return redirect('backend:index')
+    return render(request, 'category_delete.html', {'object': slug})
