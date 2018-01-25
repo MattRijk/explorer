@@ -56,12 +56,10 @@ class SuperUserLoginTestCase(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertTrue(login)
         self.assertTemplateUsed('index.html')
-
         response = self.client.get('/backend/')
         self.assertIn('buser', str(response.content))
         self.assertIn('buser1234@yahoo.com', str(response.content))
         self.assertIn('Delete', str(response.content))
-
         self.client.post('/backend/user/delete/2')
         response = self.client.get('/backend/')
         self.assertNotIn('buser1234@yahoo.com', str(response.content))
@@ -94,35 +92,27 @@ class CategoryAdminTestCase(TestCase):
 
     def setUp(self):
         self.client = Client()
+        self.superUserName = 'auser'
+        self.superUserEmail = 'auser1234@yahoo.com'
 
     def test_a_list_of_categories_is_on_backend(self):
-        self.create_superuser(username='auser', email='auser1234@yahoo.com')
-        self.client.get('/login/')
-        self.client.login(username='auser', password='passphrase')
-        categoryOne = Category.objects.create(title='category one')
-        categoryOne.save()
-        categoryTwo = Category.objects.create(title='category two')
-        categoryTwo.save()
+        self.superuserLoggedIn(username=self.superUserName, email=self.superUserEmail)
+        Category.objects.create(title='category one')
+        Category.objects.create(title='category two')
         response = self.client.get('/backend/')
         self.assertIn('category one', str(response.content))
         self.assertIn('category two', str(response.content))
 
     def test_user_can_edit_a_category(self):
-        self.create_superuser(username='auser', email='auser1234@yahoo.com')
-        self.client.get('/login/')
-        self.client.login(username='auser', password='passphrase')
-        categoryOne = Category.objects.create(title='category one')
-        categoryOne.save()
+        self.superuserLoggedIn(username=self.superUserName, email=self.superUserEmail)
+        Category.objects.create(title='category one')
         self.client.post('/backend/category/edit/category-one/', data={'title':'category two'})
         response = self.client.get('/backend/')
         self.assertIn('category two', str(response.content))
 
     def test_user_can_delete_category(self):
-        self.create_superuser(username='auser', email='auser1234@yahoo.com')
-        self.client.get('/login/')
-        self.client.login(username='auser', password='passphrase')
-        categoryOne = Category.objects.create(title='category one')
-        categoryOne.save()
+        self.superuserLoggedIn(username=self.superUserName, email=self.superUserEmail)
+        Category.objects.create(title='category one')
         response = self.client.get('/backend/')
         self.assertIn('category one', str(response.content))
         self.client.post('/backend/category/delete/category-one/')
@@ -133,6 +123,16 @@ class CategoryAdminTestCase(TestCase):
         user = User(username=username, email='', is_superuser=True)
         user.set_password('passphrase')  # can't set above because of hashing
         user.save()  # needed to save to temporary test db
+
+    def superuserLoggedIn(self, username, email):
+        self.create_superuser(username=username, email=email)
+        login, response = self.loggedIn(username=username, email=email)
+        return login, response
+
+    def loggedIn(self, username, email):
+        response = self.client.get('/login/')
+        login = self.client.login(username=username, email=email, password='passphrase')
+        return login, response
 
 
 
