@@ -16,3 +16,10 @@ def edit_user(request, pk):
         form.save()
         return redirect('backend:index')
     return render(request, template_name='user_form.html', context={'form':form})
+
+def delete_user(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('backend:index')
+    return render(request, 'delete.html', {'object': user})

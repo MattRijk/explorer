@@ -35,13 +35,15 @@
   <tr>
     <th>Username</th>
     <th>Email Address</th>
-    <th>            </th>
+    <th>          </th>
+    <th>          </th>
   </tr>
   {% for user in activeUsers %}
   <tr>
     <td>{{ user.username }}</td>
     <td>{{ user.email }} </td>
     <td><a href="{% url 'backend:edit' pk=user.pk %}">Edit</a></td>
+    <td><a href="{% url 'backend:delete' pk=user.pk %}">Delete</a></td>
   </tr>
 {% endfor %}
 </table>
