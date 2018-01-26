@@ -28,7 +28,6 @@ class LoginTests(TestCase):
         self.assertEqual(200, self.response.status_code)
         self.assertTrue(self.authenticated)
         self.assertTemplateUsed('index.html')
-
         response = self.client.get(reverse('backend:index'))
         self.assertIn('buser', str(response.content))
 
@@ -64,9 +63,7 @@ class LoginTests(TestCase):
         self.assertEqual(200, self.response.status_code)
         self.assertTrue(self.authenticated)
         self.assertTemplateUsed('index.html')
-
         self.assertIn('auser', str(response.content))
-
         self.client.post('/backend/user/edit/1',
              data={'username':'auser', 'email':'auser5555@yahoo.com',
                    'is_superuser':True})
@@ -82,6 +79,17 @@ class LoginTests(TestCase):
                                'email':'superuser2@yahoo.com',
                                'password1':'passphrase', 'password2':'passphrase',
                                'is_superuser': True})
+        response = self.client.get(reverse('backend:index'))
+        self.assertTrue(self.authenticated)
+        self.assertIn('some_user', str(response.content))
+
+    def test_active_user_can_create_user(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('Create Active User', str(response.content))
+        self.client.post('/backend/user/create/', data={'username': 'some_user',
+                               'email':'superuser2@yahoo.com',
+                               'password1':'passphrase', 'password2':'passphrase',
+                               'is_superuser': False})
         response = self.client.get(reverse('backend:index'))
         self.assertTrue(self.authenticated)
         self.assertIn('some_user', str(response.content))

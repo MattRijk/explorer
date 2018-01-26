@@ -26,5 +26,5 @@ def delete_category(request, slug):
     if request.method == 'POST':
         slug.delete()
         return redirect('backend:index')
-    return render(request, 'categories/category_delete.html', {'object': slug})
+    return render(request, 'categories/category_delete.html', {'object':slug})
 

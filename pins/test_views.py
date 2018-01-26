@@ -57,7 +57,6 @@ class CategoryViewTests(TestCase):
         login = self.client.login(username=username, email=email, password='passphrase')
         return login, response
 
-
 class PinViewsTest(TestCase):
 
     def setUp(self):
