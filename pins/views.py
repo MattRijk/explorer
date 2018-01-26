@@ -4,7 +4,8 @@ from pins.models import Category
 
 
 def homepage(requests):
-    return render(requests, template_name='home.html', context={})
+    categories = Category.objects.all()
+    return render(requests, template_name='home.html', context={'categories': categories})
 
 def create_category(request):
     form = CategoryForm(request.POST or None)

@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 
-class LoginViewTests(TestCase):
+class AdminUserViewTests(TestCase):
 
     def setUp(self):
         self.client = Client()

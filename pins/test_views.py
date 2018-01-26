@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from pins.models import Category
 
 
-class CategoryViewTests(TestCase):
+class AdminCategoryViewTests(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -57,13 +57,31 @@ class CategoryViewTests(TestCase):
         login = self.client.login(username=username, email=email, password='passphrase')
         return login, response
 
+class CategoryViewTest(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_category_list(self):
+        Category.objects.create(title='Category One')
+        Category.objects.create(title='Category Two')
+        response = self.client.get(reverse('homepage'))
+        self.assertIn('Category One', str(response.content))
+        self.assertIn('Category Two', str(response.content))
+
+
+
+
+
+
+
 class PinViewsTest(TestCase):
 
     def setUp(self):
         self.client = Client()
 
     def test_home_page_template(self):
-        response = self.client.get('/')
+        response = self.client.get(reverse('homepage'))
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, 'home.html')
 
