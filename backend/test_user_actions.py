@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
 
-class SuperUserLoginTests(TestCase):
+class LoginTests(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -16,13 +16,15 @@ class SuperUserLoginTests(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, 'index.html')
 
-    def test_superuser_can_login_to_dashboard(self):
+    def test_superuser_can_login(self):
         self.assertEqual(200, self.response.status_code)
         self.assertTrue(self.authenticated)
         self.assertTemplateUsed('index.html')
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('auser', str(response.content))
 
-    def test_username_exists_on_dashboard(self):
-        self.save_active_user(username='buser', email='buser1234@yahoo.com')
+    def test_user_exists(self):
+        self.save_user(username='buser', email='buser1234@yahoo.com')
         self.assertEqual(200, self.response.status_code)
         self.assertTrue(self.authenticated)
         self.assertTemplateUsed('index.html')
@@ -30,8 +32,8 @@ class SuperUserLoginTests(TestCase):
         response = self.client.get(reverse('backend:index'))
         self.assertIn('buser', str(response.content))
 
-    def test_superuser_can_edit_active_user_on_dashboard(self):
-        self.save_active_user(username='buser', email='buser1234@yahoo.com')
+    def test_superuser_can_edit_active_user(self):
+        self.save_user(username='buser', email='buser1234@yahoo.com')
         self.assertEqual(200, self.response.status_code)
         self.assertTrue(self.authenticated)
         self.assertTemplateUsed('index.html')
@@ -42,8 +44,8 @@ class SuperUserLoginTests(TestCase):
              data={'username':'buser', 'email':'buser5555@yahoo.com', 'password':'passphrase'})
         self.assertIn('buser5555@yahoo.com', str(self.client.get(reverse('backend:index')).content))
 
-    def test_superuser_can_delete_active_user_on_dashboard(self):
-        self.save_active_user(username='buser', email='buser1234@yahoo.com')
+    def test_superuser_can_delete_active_user(self):
+        self.save_user(username='buser', email='buser1234@yahoo.com')
         self.assertEqual(200, self.response.status_code)
         self.assertTrue(self.authenticated)
         self.assertTemplateUsed('index.html')
@@ -55,12 +57,41 @@ class SuperUserLoginTests(TestCase):
         response = self.client.get(reverse('backend:index'))
         self.assertNotIn('buser1234@yahoo.com', str(response.content))
 
-    def save_active_user(self, username, email):
-        user = self.create_active_user(email, username)
+    def test_superuser_can_edit_superuser(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('Edit Superuser', str(response.content))
+        self.assertIn('Delete Superuser', str(response.content))
+        self.assertEqual(200, self.response.status_code)
+        self.assertTrue(self.authenticated)
+        self.assertTemplateUsed('index.html')
+
+        self.assertIn('auser', str(response.content))
+
+        self.client.post('/backend/user/edit/1',
+             data={'username':'auser', 'email':'auser5555@yahoo.com',
+                   'is_superuser':True})
+        response = self.client.get(reverse('backend:index'))
+        self.assertTrue(self.authenticated)
+        self.assertIn('auser', str(response.content))
+        self.assertIn('auser5555@yahoo.com', str(response.content))
+
+    def test_superuser_can_create_superuser(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('Create Superuser', str(response.content))
+        self.client.post('/backend/user/create/', data={'username': 'some_user',
+                               'email':'superuser2@yahoo.com',
+                               'password1':'passphrase', 'password2':'passphrase',
+                               'is_superuser': True})
+        response = self.client.get(reverse('backend:index'))
+        self.assertTrue(self.authenticated)
+        self.assertIn('some_user', str(response.content))
+
+    def save_user(self, username, email):
+        user = self.create_user(email, username)
         user.save()
 
-    def create_active_user(self, email, username):
-        user = User(username=username, email=email, is_active=True)
+    def create_user(self, email, username):
+        user = User(username=username, email=email, is_superuser=False,  is_active=True)
         user.set_password('passphrase')
         return user
 
@@ -75,11 +106,8 @@ class SuperUserLoginTests(TestCase):
         return login, response
 
     def create_superuser(self, username, email):
-        user = User(username=username, email=email, is_superuser=True)
+        user = User(username=username, email=email, is_superuser=True, is_active=True)
         user.set_password('passphrase')  # can't set above because of hashing
         user.save()                      # needed to save to temporary test db
-
-
-
 
 

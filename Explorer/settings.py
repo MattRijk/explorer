@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'Explorer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'PinDB'),
+        'NAME': os.path.join(BASE_DIR, 'PinDB.sqlite3'),
     }
 }
 

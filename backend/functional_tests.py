@@ -3,7 +3,7 @@ from selenium import webdriver
 import requests
 
 
-class UserAdminTestCase(LiveServerTestCase):
+class BackendTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.PhantomJS('/usr/local/bin/phantomjs')
@@ -34,6 +34,7 @@ class UserAdminTestCase(LiveServerTestCase):
         self.assertTemplateUsed('backend.html')
         self.assertIn('kuser', self.browser.page_source)
         self.assertIn('Sign Out', self.browser.page_source)
+
 
     def TearDown(self):
         self.browser.close()

@@ -23,14 +23,20 @@
 {% if user.is_superuser %}
 <table>
  <b>SuperUsers</b>
+  <a href="{% url 'backend:createUser' %}">Create Superuser</a>
   <tr>
     <th>Username</th>
     <th>Email Address</th>
+    <th>          </th>
+    <th>          </th>
   </tr>
   {% for user in superUsers %}
   <tr>
     <td>{{ user.username }}</td>
     <td>{{ user.email }}</td>
+    <td><a href="{% url 'backend:editUser' pk=user.pk %}">Edit Superuser</a></td>
+    <td><a href="">Delete Superuser</a></td>
+
   </tr>
   {% endfor %}
 </table>

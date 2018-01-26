@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from backend.forms import EditUserForm
+from backend.forms import EditUserForm, CreateUserForm
 from pins.models import Category
 
 def index(requests):
@@ -11,6 +11,13 @@ def index(requests):
                'activeUsers':activeUser,
                'categories':categories}
     return render(requests, template_name='index.html', context=context)
+
+def create_user(request):
+    form = CreateUserForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('backend:index')
+    return render(request, template_name='users/user_form.html', context={'form':form})
 
 def edit_user(request, pk):
     user = get_object_or_404(User, pk=pk)
