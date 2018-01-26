@@ -1,4 +1,5 @@
-from django.test import TestCase,  Client
+from django.test import TestCase, Client
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from pins.models import Category
 
@@ -7,31 +8,38 @@ class CategoryViewTests(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.superUserName = 'auser'
-        self.superUserEmail = 'auser1234@yahoo.com'
+        self.superuserLoggedIn(username='auser', email='auser1234@yahoo.com')
 
     def test_a_list_of_categories_is_on_backend(self):
-        self.superuserLoggedIn(username=self.superUserName, email=self.superUserEmail)
-        Category.objects.create(title='category one')
-        Category.objects.create(title='category two')
-        response = self.client.get('/backend/')
-        self.assertIn('category one', str(response.content))
-        self.assertIn('category two', str(response.content))
+        Category.objects.create(title='categories one')
+        Category.objects.create(title='categories two')
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('categories one', str(response.content))
+        self.assertIn('categories two', str(response.content))
 
-    def test_user_can_edit_a_category(self):
-        self.superuserLoggedIn(username=self.superUserName, email=self.superUserEmail)
+    def test_create_form_exists(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('Create Category', str(response.content))
+
+    def test_user_can_create_category(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertNotIn('category one', str(response.content))
+        self.client.post('/backend/categories/create/', data={'title': 'category one'})
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('category one', str(response.content))
+
+    def test_user_can_edit_category(self):
         Category.objects.create(title='category one')
-        self.client.post('/backend/category/edit/category-one/', data={'title':'category two'})
-        response = self.client.get('/backend/')
+        self.client.post('/backend/categories/edit/category-one/', data={'title':'category two'})
+        response = self.client.get(reverse('backend:index'))
         self.assertIn('category two', str(response.content))
 
     def test_user_can_delete_category(self):
-        self.superuserLoggedIn(username=self.superUserName, email=self.superUserEmail)
         Category.objects.create(title='category one')
-        response = self.client.get('/backend/')
+        response = self.client.get(reverse('backend:index'))
         self.assertIn('category one', str(response.content))
-        self.client.post('/backend/category/delete/category-one/')
-        response = self.client.get('/backend/')
+        self.client.post('/backend/categories/delete/category-one/')
+        response = self.client.get(reverse('backend:index'))
         self.assertNotIn('category one', str(response.content))
 
     def create_superuser(self, username, email):

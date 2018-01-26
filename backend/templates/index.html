@@ -10,6 +10,7 @@
 {% endif %}
 <div>
     <b>Categories</b>
+    <a href="{% url 'backend:createCategory' %}">Create Category</a>
     {% for category in categories %}
         <div>
             {{ category.title }}
