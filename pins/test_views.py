@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from pins.models import Category
+from pins.models import Category, Pin
 
 
 class AdminCategoryViewTests(TestCase):
@@ -10,7 +10,11 @@ class AdminCategoryViewTests(TestCase):
         self.client = Client()
         self.superuserLoggedIn(username='auser', email='auser1234@yahoo.com')
 
-    def test_a_list_of_categories_is_on_backend(self):
+    def test_can_get_category_list_template(self):
+        response = self.client.get(reverse('backend:categories'))
+        self.assertTemplateUsed(response, 'categories/category_list.html')
+
+    def test_a_list_of_categories_on_dashboard(self):
         Category.objects.create(title='categories one')
         Category.objects.create(title='categories two')
         response = self.client.get(reverse('backend:index'))
@@ -33,6 +37,13 @@ class AdminCategoryViewTests(TestCase):
         self.client.post('/backend/categories/edit/category-one/', data={'title':'category two'})
         response = self.client.get(reverse('backend:index'))
         self.assertIn('category two', str(response.content))
+
+    def test_user_can_edit_category_on_category_list_page(self):
+        Category.objects.create(title='category one')
+        self.client.post('/backend/categories/edit/category-one/', data={'title':'category two'})
+        response = self.client.get(reverse('backend:categories'))
+        self.assertIn('category two', str(response.content))
+        self.assertTemplateUsed(response, 'categories/category_list.html')
 
     def test_user_can_delete_category(self):
         Category.objects.create(title='category one')
@@ -69,8 +80,9 @@ class CategoryViewTest(TestCase):
         self.assertIn('Category One', str(response.content))
         self.assertIn('Category Two', str(response.content))
 
+class DashboardPinViewTest(TestCase):
 
-
+   pass
 
 
 
