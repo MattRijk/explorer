@@ -14,24 +14,24 @@ class AdminCategoryViewTests(TestCase):
         response = self.client.get(reverse('backend:categories'))
         self.assertTemplateUsed(response, 'categories/category_list.html')
 
-    def test_a_list_of_categories_on_dashboard(self):
-        Category.objects.create(title='category one')
-        Category.objects.create(title='category two')
-        response = self.client.get(reverse('backend:categories'))
-        self.assertIn('category one', str(response.content))
-        self.assertIn('category two', str(response.content))
-
     def test_categories_link_on_dashboard(self):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Categories</a>' % reverse("backend:categories"), html=True)
+
+    def test_create_form_exists(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertContains(response, '<a href="%s">Create Category</a>' % reverse("backend:createCategory"), html=True)
 
     def test_category_list_view(self):
         response = self.client.get(reverse('backend:index'))
         self.assertEqual(200, response.status_code)
 
-    def test_create_form_exists(self):
-        response = self.client.get(reverse('backend:index'))
-        self.assertIn('Create Category', str(response.content))
+    def test_a_list_of_categories_on_category_list_page(self):
+        Category.objects.create(title='category one')
+        Category.objects.create(title='category two')
+        response = self.client.get(reverse('backend:categories'))
+        self.assertIn('category one', str(response.content))
+        self.assertIn('category two', str(response.content))
 
     def test_user_can_create_category(self):
         response = self.client.get(reverse('backend:categories'))
@@ -78,4 +78,10 @@ class AdminCategoryViewTests(TestCase):
 
 class DashboardPinViewTest(TestCase):
 
-   pass
+    def test_pins_link_on_dashboard(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertContains(response, '<a href="%s">Pins</a>' % reverse("backend:pins"), html=True)
+
+    def test_create_form_exists(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertContains(response, '<a href="%s">Create Pin</a>' % reverse("backend:createPin"), html=True)

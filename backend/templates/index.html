@@ -12,6 +12,11 @@
     <a href="{% url 'backend:categories' %}">Categories</a><br>
     <a href="{% url 'backend:createCategory' %}">Create Category</a>
 </div>
+
+<div>
+    <a href="{% url 'backend:pins' %}">Pins</a><br>
+    <a href="{% url 'backend:createPin' %}">Create Pin</a>
+</div>
 <br>
 {% if user.is_superuser %}
 <table>
@@ -42,8 +47,8 @@
     <th>          </th>
     <th>          </th>
   </tr>
+    <a href="{% url 'backend:createUser' %}">Create Active User</a>
   {% for user in activeUsers %}
-  <a href="{% url 'backend:createUser' %}">Create Active User</a>
   <tr>
     <td>{{ user.username }}</td>
     <td>{{ user.email }} </td>
