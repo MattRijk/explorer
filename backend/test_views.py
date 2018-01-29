@@ -14,26 +14,22 @@ class AdminCategoryViewTests(TestCase):
         response = self.client.get(reverse('backend:categories'))
         self.assertTemplateUsed(response, 'categories/category_list.html')
 
-    def test_categories_link_on_dashboard(self):
+    def test_category_list_link(self):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Categories</a>' % reverse("backend:categories"), html=True)
 
-    def test_create_form_exists(self):
+    def test_category_create_link_exists(self):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Create Category</a>' % reverse("backend:createCategory"), html=True)
 
     def test_category_list_view(self):
-        response = self.client.get(reverse('backend:index'))
-        self.assertEqual(200, response.status_code)
-
-    def test_a_list_of_categories_on_category_list_page(self):
         Category.objects.create(title='category one')
         Category.objects.create(title='category two')
         response = self.client.get(reverse('backend:categories'))
         self.assertIn('category one', str(response.content))
         self.assertIn('category two', str(response.content))
 
-    def test_user_can_create_category(self):
+    def test_category_create_view(self):
         response = self.client.get(reverse('backend:categories'))
         self.assertNotIn('category one', str(response.content))
         redirect = self.client.post('/backend/categories/create/', data={'title': 'category one'})
@@ -42,7 +38,7 @@ class AdminCategoryViewTests(TestCase):
         self.assertIn('category one', str(response.content))
         self.assertTemplateUsed(response, 'categories/category_list.html')
 
-    def test_user_can_edit_category_on_category_list_page(self):
+    def test_category_edit_view(self):
         Category.objects.create(title='category one')
         redirect = self.client.post('/backend/categories/edit/category-one/', data={'title':'category two'})
         self.assertRedirects(redirect, expected_url=reverse('backend:categories'), status_code=302, target_status_code=200)
@@ -50,7 +46,7 @@ class AdminCategoryViewTests(TestCase):
         self.assertIn('category two', str(response.content))
         self.assertTemplateUsed(response, 'categories/category_list.html')
 
-    def test_user_can_delete_category(self):
+    def test_category_delete_view(self):
         Category.objects.create(title='category one')
         response = self.client.get(reverse('backend:categories'))
         self.assertIn('category one', str(response.content))
@@ -85,3 +81,5 @@ class DashboardPinViewTest(TestCase):
     def test_create_form_exists(self):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Create Pin</a>' % reverse("backend:createPin"), html=True)
+
+    def test_pin_list_view(self):
