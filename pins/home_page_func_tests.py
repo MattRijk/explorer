@@ -13,7 +13,6 @@ class IndexPageFunctionalTests(LiveServerTestCase):
     def test_title_on_index_page(self):
         self.assertIn('home page',self.page)
 
-
     def TearDown(self):
         self.browser.close()
 

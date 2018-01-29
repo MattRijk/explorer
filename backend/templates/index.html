@@ -14,13 +14,13 @@
 </div>
 <br>
 <div>
-    <a href="{% url 'backend:pins' %}">Pins</a><br>
+    <a href="{% url 'backend:pins_list' %}">Pins</a><br>
     <a href="{% url 'backend:createPin' %}">Create Pin</a>
 </div>
 <br>
 {% if user.is_superuser %}
 <table>
- <b>SuperUsers</b>
+ <b>SuperUsers</b><br>
   <a href="{% url 'backend:createUser' %}">Create Superuser</a>
   <tr>
     <th>Username</th>
@@ -32,15 +32,15 @@
   <tr>
     <td>{{ user.username }}</td>
     <td>{{ user.email }}</td>
-    <td><a href="{% url 'backend:editUser' pk=user.pk %}">Edit Superuser</a></td>
-    <td><a href="">Delete Superuser</a></td>
+    <td><a href="{% url 'backend:editUser' pk=user.pk %}">Edit</a></td>
+    <td><a href="{% url 'backend:deleteUser' pk=user.pk %}">Delete</a></td>
 
   </tr>
   {% endfor %}
 </table>
 <br/>
 <table>
-  <b>Active Users</b>
+  <b>Active Users</b>><br>
   <tr>
     <th>Username</th>
     <th>Email Address</th>
@@ -52,8 +52,8 @@
   <tr>
     <td>{{ user.username }}</td>
     <td>{{ user.email }} </td>
-    <td><a href="{% url 'backend:editUser' pk=user.pk %}">Edit</a></td>
-    <td><a href="{% url 'backend:deleteUser' pk=user.pk %}">Delete</a></td>
+    <td><a href="{% url 'backend:editUser' pk=user.pk %}">Edit Active User</a></td>
+    <td><a href="{% url 'backend:deleteUser' pk=user.pk %}">Delete Active User</a></td>
   </tr>
 {% endfor %}
 </table>

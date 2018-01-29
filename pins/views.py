@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from pins.forms import CategoryForm
-from pins.models import Category
+from pins.forms import CategoryForm, PinForm
+from pins.models import Category, Pin
 
 
 def homepage(requests):
@@ -11,7 +11,7 @@ def create_category(request):
     form = CategoryForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('backend:index')
+        return redirect('backend:categories')
     return render(request, template_name='categories/category_form.html', context={'form':form})
 
 def edit_category(request, slug):
@@ -31,12 +31,18 @@ def delete_category(request, slug):
 
 def category_list(request):
     categories = Category.objects.all()
-    return render(request, 'categories/category_list.html', {'categories': categories})
+    return render(request, 'categories/category_list.html', {'categories':categories})
 
 
 def pins_list(request):
-    pass
+    pins = Pin.objects.all()
+    return render(request, 'pins/pins_list.html', {'pins':pins})
 
 def create_pin(request):
-    pass
+    form = PinForm(request.POST, request.FILES)
+    if form.is_valid():
+        form.save()
+        return redirect('backend:pins_list')
+    return render(request, template_name='pins/pins_form.html', context={'form':form})
+
 

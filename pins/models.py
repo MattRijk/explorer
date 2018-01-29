@@ -27,8 +27,7 @@ class Category(models.Model):
 
 
 class Pin(models.Model):
-    image = models.ImageField(upload_to="uploads/")
-    # uuid = models.CharField(max_length=10, unique=True, blank=True)
+    image = models.ImageField(upload_to='uploads/', null=True, blank=True)
     slug = models.SlugField(max_length=200, blank=True)
     note = models.TextField(max_length=500)
     published = models.DateTimeField(default=timezone.now)
@@ -41,12 +40,6 @@ class Pin(models.Model):
         return self.slug
 
     def save(self, *args, **kwargs):
-        # if not self.uuid:
-        #     self.uuid = str(self.image).strip('home/matt/Documents/Explorer/media/').strip('.jpg')
-        #     super(Pin, self).save(*args, **kwargs)
-        # else:
-        #     super(Pin, self).save(*args, **kwargs)
-
         if not self.slug:
             slug = str(self.image).strip('home/matt/Documents/Explorer/media/').strip('.jpg')
             self.slug = slugify(str(slug))

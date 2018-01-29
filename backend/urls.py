@@ -15,6 +15,6 @@ urlpatterns = [
     url(r'^categories/edit/(?P<slug>[\w-]+)/$', view=edit_category, name='editCategory'),
     url(r'^categories/delete/(?P<slug>[\w-]+)/$', view=delete_category, name='deleteCategory'),
 
-    url(r'^pins/$', view=pins_list, name='pins'),
-    url(r'^categories/create/', view=create_pin, name='createPin'),
+    url(r'^pins/$', view=pins_list, name='pins_list'),
+    url(r'^pins/create/', view=create_pin, name='createPin'),
 ]

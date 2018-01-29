@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
 from pins.models import Category, Pin
 
@@ -33,7 +34,7 @@ class AdminCategoryViewTests(TestCase):
         response = self.client.get(reverse('backend:categories'))
         self.assertNotIn('category one', str(response.content))
         redirect = self.client.post('/backend/categories/create/', data={'title': 'category one'})
-        self.assertRedirects(redirect, expected_url=reverse('backend:index'), status_code=302, target_status_code=200)
+        self.assertRedirects(redirect, expected_url=reverse('backend:categories'), status_code=302, target_status_code=200)
         response = self.client.get(reverse('backend:categories'))
         self.assertIn('category one', str(response.content))
         self.assertTemplateUsed(response, 'categories/category_list.html')
@@ -76,10 +77,49 @@ class DashboardPinViewTest(TestCase):
 
     def test_pins_link_on_dashboard(self):
         response = self.client.get(reverse('backend:index'))
-        self.assertContains(response, '<a href="%s">Pins</a>' % reverse("backend:pins"), html=True)
+        self.assertContains(response, '<a href="%s">Pins</a>' % reverse("backend:pins_list"), html=True)
 
     def test_create_form_exists(self):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Create Pin</a>' % reverse("backend:createPin"), html=True)
 
-    def test_pin_list_view(self):
+    def test_pin_list_template_exists(self):
+        response = self.client.get(reverse('backend:pins_list'))
+        self.assertEqual(200, response.status_code)
+
+    def test_pin_list_has_a_list_of_pins(self):
+        category = Category.objects.create(title='Amsterdam')
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904795089.jpg'
+        note = 'a short description about the image'
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        image1 = SimpleUploadedFile(name='4904795089.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904777907.jpg'
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        image2 = SimpleUploadedFile(name='4904777907.jpg', content=open(path, 'rb').read(),
+                                    content_type='image/jpeg')
+        Pin.objects.create(image=image1, note=note, category=category)
+        Pin.objects.create(image=image2, note=note, category=category)
+        response = self.client.get(reverse('backend:pins_list'))
+        self.assertIn('4904795089', str(response.content))
+        self.assertIn('4904777907', str(response.content))
+
+    def test_pins_form_template_exists(self):
+        response = self.client.get(reverse('backend:createPin'))
+        self.assertTemplateUsed(response, 'pins/pins_form.html')
+
+    def test_pin_create_view(self):
+        response = self.client.get(reverse('backend:pins_list'))
+        self.assertNotIn('4904795089', str(response.content))
+        category = Category.objects.create(title='Amsterdam')
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904795089.jpg'
+        image = SimpleUploadedFile(name='4904795089.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        note = 'a short description about the image'
+        redirect = self.client.post('/backend/pins/create/',data = {'image':image, 'note':note, 'category':category.id})
+        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'), status_code=302, target_status_code=200)
+        response = self.client.get(reverse('backend:pins_list'))
+        self.assertIn('4904795089', str(response.content))
+        self.assertTemplateUsed(response, 'pins/pins_list.html')
+
+
