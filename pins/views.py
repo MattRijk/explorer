@@ -19,14 +19,14 @@ def edit_category(request, slug):
     form = CategoryForm(request.POST or None, instance=category)
     if form.is_valid():
         form.save()
-        return redirect('backend:index')
+        return redirect('backend:categories')
     return render(request, template_name='categories/category_form.html', context={'form':form})
 
 def delete_category(request, slug):
     slug = get_object_or_404(Category, slug=slug)
     if request.method == 'POST':
         slug.delete()
-        return redirect('backend:index')
+        return redirect('backend:categories')
     return render(request, 'categories/category_delete.html', {'object':slug})
 
 def category_list(request):

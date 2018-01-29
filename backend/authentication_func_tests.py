@@ -3,7 +3,7 @@ from selenium import webdriver
 import requests
 
 
-class DashboardUserFunctionalTest(LiveServerTestCase):
+class UserAuthenticationFunctionalTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.PhantomJS('/usr/local/bin/phantomjs')

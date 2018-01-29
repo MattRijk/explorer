@@ -1,107 +1,69 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from pins.models import Category, Pin
 
 
-class DashboardUserViewTests(TestCase):
+class AdminCategoryViewTests(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.authenticated, self.response = self.superuserLoggedIn(
-            username='auser' ,
-            email='auser1234@yahoo.com')
+        self.superuserLoggedIn(username='auser', email='auser1234@yahoo.com')
 
-    def test_dashboard_template(self):
+    def test_can_get_category_list_template(self):
+        response = self.client.get(reverse('backend:categories'))
+        self.assertTemplateUsed(response, 'categories/category_list.html')
+
+    def test_a_list_of_categories_on_dashboard(self):
+        Category.objects.create(title='category one')
+        Category.objects.create(title='category two')
+        response = self.client.get(reverse('backend:categories'))
+        self.assertIn('category one', str(response.content))
+        self.assertIn('category two', str(response.content))
+
+    def test_categories_link_on_dashboard(self):
+        response = self.client.get(reverse('backend:index'))
+        self.assertContains(response, '<a href="%s">Categories</a>' % reverse("backend:categories"), html=True)
+
+    def test_category_list_view(self):
         response = self.client.get(reverse('backend:index'))
         self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, 'index.html')
 
-    def test_superuser_can_login(self):
-        self.assertEqual(200, self.response.status_code)
-        self.assertTrue(self.authenticated)
-        self.assertTemplateUsed('index.html')
+    def test_create_form_exists(self):
         response = self.client.get(reverse('backend:index'))
-        self.assertIn('auser', str(response.content))
+        self.assertIn('Create Category', str(response.content))
 
-    def test_user_exists(self):
-        self.save_user(username='buser', email='buser1234@yahoo.com')
-        self.assertEqual(200, self.response.status_code)
-        self.assertTrue(self.authenticated)
-        self.assertTemplateUsed('index.html')
-        response = self.client.get(reverse('backend:index'))
-        self.assertIn('buser', str(response.content))
+    def test_user_can_create_category(self):
+        response = self.client.get(reverse('backend:categories'))
+        self.assertNotIn('category one', str(response.content))
+        redirect = self.client.post('/backend/categories/create/', data={'title': 'category one'})
+        self.assertRedirects(redirect, expected_url=reverse('backend:index'), status_code=302, target_status_code=200)
+        response = self.client.get(reverse('backend:categories'))
+        self.assertIn('category one', str(response.content))
+        self.assertTemplateUsed(response, 'categories/category_list.html')
 
-    def test_superuser_can_edit_active_user(self):
-        self.save_user(username='buser', email='buser1234@yahoo.com')
-        self.assertEqual(200, self.response.status_code)
-        self.assertTrue(self.authenticated)
-        self.assertTemplateUsed('index.html')
-        self.assertIn('buser', str(self.client.get(reverse('backend:index')).content))
-        self.assertIn('buser1234@yahoo.com', str(self.client.get(reverse('backend:index')).content))
-        self.assertIn('Edit', str(self.client.get(reverse('backend:index')).content))
-        self.client.post('/backend/user/edit/2',
-             data={'username':'buser', 'email':'buser5555@yahoo.com', 'password':'passphrase'})
-        self.assertIn('buser5555@yahoo.com', str(self.client.get(reverse('backend:index')).content))
+    def test_user_can_edit_category_on_category_list_page(self):
+        Category.objects.create(title='category one')
+        redirect = self.client.post('/backend/categories/edit/category-one/', data={'title':'category two'})
+        self.assertRedirects(redirect, expected_url=reverse('backend:categories'), status_code=302, target_status_code=200)
+        response = self.client.get(reverse('backend:categories'))
+        self.assertIn('category two', str(response.content))
+        self.assertTemplateUsed(response, 'categories/category_list.html')
 
-    def test_superuser_can_delete_active_user(self):
-        self.save_user(username='buser', email='buser1234@yahoo.com')
-        self.assertEqual(200, self.response.status_code)
-        self.assertTrue(self.authenticated)
-        self.assertTemplateUsed('index.html')
-        response = self.client.get(reverse('backend:index'))
-        self.assertIn('buser', str(response.content))
-        self.assertIn('buser1234@yahoo.com', str(response.content))
-        self.assertIn('Delete', str(response.content))
-        self.client.post('/backend/user/delete/2')
-        response = self.client.get(reverse('backend:index'))
-        self.assertNotIn('buser1234@yahoo.com', str(response.content))
+    def test_user_can_delete_category(self):
+        Category.objects.create(title='category one')
+        response = self.client.get(reverse('backend:categories'))
+        self.assertIn('category one', str(response.content))
+        redirect = self.client.post('/backend/categories/delete/category-one/')
+        self.assertRedirects(redirect, expected_url=reverse('backend:categories'),status_code=302, target_status_code=200)
+        response = self.client.get(reverse('backend:categories'))
+        self.assertNotIn('category one', str(response.content))
+        self.assertTemplateUsed(response, 'categories/category_list.html')
 
-    def test_superuser_can_edit_superuser(self):
-        response = self.client.get(reverse('backend:index'))
-        self.assertIn('Edit Superuser', str(response.content))
-        self.assertIn('Delete Superuser', str(response.content))
-        self.assertEqual(200, self.response.status_code)
-        self.assertTrue(self.authenticated)
-        self.assertTemplateUsed('index.html')
-        self.assertIn('auser', str(response.content))
-        self.client.post('/backend/user/edit/1',
-             data={'username':'auser', 'email':'auser5555@yahoo.com',
-                   'is_superuser':True})
-        response = self.client.get(reverse('backend:index'))
-        self.assertTrue(self.authenticated)
-        self.assertIn('auser', str(response.content))
-        self.assertIn('auser5555@yahoo.com', str(response.content))
-
-    def test_superuser_can_create_superuser(self):
-        response = self.client.get(reverse('backend:index'))
-        self.assertIn('Create Superuser', str(response.content))
-        self.client.post('/backend/user/create/', data={'username': 'some_user',
-                               'email':'superuser2@yahoo.com',
-                               'password1':'passphrase', 'password2':'passphrase',
-                               'is_superuser': True})
-        response = self.client.get(reverse('backend:index'))
-        self.assertTrue(self.authenticated)
-        self.assertIn('some_user', str(response.content))
-
-    def test_active_user_can_create_user(self):
-        response = self.client.get(reverse('backend:index'))
-        self.assertIn('Create Active User', str(response.content))
-        self.client.post('/backend/user/create/', data={'username': 'some_user',
-                               'email':'superuser2@yahoo.com',
-                               'password1':'passphrase', 'password2':'passphrase',
-                               'is_superuser': False})
-        response = self.client.get(reverse('backend:index'))
-        self.assertTrue(self.authenticated)
-        self.assertIn('some_user', str(response.content))
-
-    def save_user(self, username, email):
-        user = self.create_user(email, username)
-        user.save()
-
-    def create_user(self, email, username):
-        user = User(username=username, email=email, is_superuser=False,  is_active=True)
-        user.set_password('passphrase')
-        return user
+    def create_superuser(self, username, email):
+        user = User(username=username, email='', is_superuser=True)
+        user.set_password('passphrase')  # can't set above because of hashing
+        user.save()  # needed to save to temporary test db
 
     def superuserLoggedIn(self, username, email):
         self.create_superuser(username=username, email=email)
@@ -113,8 +75,7 @@ class DashboardUserViewTests(TestCase):
         login = self.client.login(username=username, email=email, password='passphrase')
         return login, response
 
-    def create_superuser(self, username, email):
-        user = User(username=username, email=email, is_superuser=True, is_active=True)
-        user.set_password('passphrase')  # can't set above because of hashing
-        user.save()                      # needed to save to temporary test db
 
+class DashboardPinViewTest(TestCase):
+
+   pass
