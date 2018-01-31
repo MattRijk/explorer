@@ -123,3 +123,44 @@ class DashboardPinViewTest(TestCase):
         self.assertTemplateUsed(response, 'pins/pins_list.html')
 
 
+    def test_pin_edit_view(self):
+        # create two categories
+        Category.objects.create(title='Amsterdam')
+        Category.objects.create(title='Rotterdam')
+        # pin 1
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742160.jpg'
+        image = SimpleUploadedFile(name='.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        note = 'a short description about the image'
+        category = Category.objects.get(pk=1)
+        # create pin
+        p = Pin.objects.create(image=image, note=note, category=category)
+        p.save()
+        print([pin.slug for pin in Pin.objects.all()])
+        pin = Pin.objects.get(pk=1)
+        category = Category.objects.get(pk=2)
+        redirect = self.client.post('/backend/pins/edit/4904742160/',
+            data = {'image':pin.image, 'note':'A new entry', 'category':category})
+        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'), status_code=302,
+                             target_status_code=200)
+
+        # # pin 2
+        # path = '/home/matt/Documents/Explorer/media/ImageTest/4904777907.jpg'
+        # image = SimpleUploadedFile(name='.jpg', content=open(path, 'rb').read(),
+        #                            content_type='image/jpeg')
+        # note = 'new note'
+        # category = Category.objects.get(pk=2)
+        # Pin.objects.create(image=image, note=note, category=category.id)
+        #
+        #
+        # # edit pin
+        # redirect = self.client.post('/backend/pins/edit/4904742160/',
+        #     data = {'image':'4904736510', 'note':'A new entry', 'category':category.id})
+        # self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'), status_code=302,
+        #                      target_status_code=200)
+        # response = self.client.get(reverse('backend:pins_list'))
+        # self.assertIn('4904736510', str(response.content))
+        # self.assertTemplateUsed(response, 'categories/pins_list.html')
+
+
+

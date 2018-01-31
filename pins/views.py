@@ -45,4 +45,11 @@ def create_pin(request):
         return redirect('backend:pins_list')
     return render(request, template_name='pins/pins_form.html', context={'form':form})
 
-
+def edit_pin(request, slug):
+    pin = get_object_or_404(Pin, slug=slug)
+    form = PinForm(request.POST or None, request.FILES or None,  instance=pin)
+    if form.is_valid():
+        edit = form.save(commit=False)
+        edit.save()
+        return redirect('backend:pins_list')
+    return render(request, template_name='pins/pins_form.html', context={'form':form})
