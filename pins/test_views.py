@@ -16,7 +16,6 @@ class CategoryViewTest(TestCase):
         self.assertIn('Category One', str(response.content))
         self.assertIn('Category Two', str(response.content))
 
-
 class PinViewsTest(TestCase):
 
     def setUp(self):

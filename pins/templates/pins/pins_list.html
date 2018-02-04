@@ -1,6 +1,7 @@
 Pins
 <ul>
 {% for pin in pins %}
-    <li> {{ pin.slug }} <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a></td> </li>
+    <li>{{ pin.title }}</li>
+    <li>{{ pin.slug }} <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a></td> </li>
 {% endfor %}
 </ul>
