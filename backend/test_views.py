@@ -154,7 +154,7 @@ class DashboardPinViewTest(TestCase):
         # pin 2
         title = '1935 a view of the zaandammerplein'
         path = '/home/matt/Documents/Explorer/media/ImageTest/4904777907.jpg'
-        image = SimpleUploadedFile(name='.jpg', content=open(path, 'rb').read(),
+        image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = '1935 a view of the zaandammerplein is a square in the spaarndammerbuurt neighborhood of amsterdam-west'
         category = Category.objects.get(pk=1)

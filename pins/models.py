@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
+from django.core.urlresolvers import reverse
 
 
 class Category(models.Model):
@@ -39,6 +40,9 @@ class Pin(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Pin, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('pins:pin_detail', kwargs={'slug': self.slug})
 
 
 

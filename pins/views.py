@@ -68,3 +68,10 @@ def delete_pin(request, slug):
         slug.delete()
         return redirect('backend:pins_list')
     return render(request, 'pins/pin_delete.html', {'object':slug})
+
+def pin_detail(request, slug):
+    try:
+        pin = get_object_or_404(Pin, slug=slug)
+    except Pin.MultipleObjectsReturned:
+        pin = Pin.objects.filter(slug=slug).order_by('-title').first()
+    return render(request, template_name='pins/pin_detail.html', context={'pin':pin})

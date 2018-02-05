@@ -1,7 +1,4 @@
 from django.test import TestCase, Client
-from django.template import Context, Template
-from django.test import LiveServerTestCase
-from selenium import webdriver
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pins.models import Category, Pin
@@ -26,22 +23,7 @@ class HomePageViewTest(TestCase):
         self.assertIn('category one', [category.title for category in
                                        response.context['categories']])
 
-    def test_list_of_category_pins_on_home_page(self):
-        Category.objects.create(title='category one')
-        category = Category.objects.get(title='category one')
-        title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904741066.jpg'
-        image = SimpleUploadedFile(name='4904741066.jpg', content=open(path, 'rb').read(),
-                                   content_type='image/jpeg')
-        note = 'a short description about the image'
-        Pin.objects.create(title=title, image=image, note=note, category=category)
-        response = self.client.get(reverse('homepage'))
-        self.assertEqual(200, response.status_code)
-        queryset = [pin.slug for category in
-                 response.context['categories']
-                 for pin in category.pin_set.all()
-        ]
-        self.assertIn('1936-a-street-in-amsterdam', queryset)
+
 
     # get pin image to display
     def test_can_get_image(self):

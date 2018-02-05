@@ -4,15 +4,16 @@
 <body>
 {% block content %}
 <h1>home page</h1>
-    {% for category in categories %}
+{% for category in categories %}
 <br>
-     {{ category.title }}<br>
-    pins in category<br>
+<b>{{ category.title }}</b><br>
+<b>pins in {{ category.title }}</b><br>
      {% for pin in category.pin_set.all %}
-        {{ pin.slug }}<br>
-        {{ pin.image.url }}<br>
-        <img class="pin-image" src="{{ pin.image.url }}" width="100" height="100"><br>
-     {% endfor %}<br>
+        <a href="{% url 'pins:pin_detail' pin.slug %}">
+          <img class="pin-image" src="{{ pin.image.url }}" width="100" height="100">
+        </a>
+     {% endfor %}
+<br>
     {% endfor %}
 {% endblock content %}
 </body>

@@ -30,7 +30,7 @@ class UserAuthenticationFunctionalTest(LiveServerTestCase):
         repassword.send_keys('secretpassword345')
         self.browser.find_element_by_xpath('//*[@id="signup_form"]/button').click()
         self.assertEqual(self.live_server_url + '/backend/', self.browser.current_url)
-        self.assertIn('dashboard', self.browser.page_source)
+        self.assertIn('Admin Dashboard', self.browser.page_source)
         self.assertTemplateUsed('backend.html')
         self.assertIn('muser', self.browser.page_source)
         self.assertIn('Sign Out', self.browser.page_source)
