@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from pins.forms import CategoryForm, PinForm
 from pins.models import Category, Pin
 
@@ -7,6 +8,7 @@ def homepage(requests):
     categories = Category.objects.all()
     return render(requests, template_name='home.html', context={'categories': categories})
 
+@login_required(login_url="/login/")
 def create_category(request):
     form = CategoryForm(request.POST or None)
     if form.is_valid():
@@ -14,6 +16,7 @@ def create_category(request):
         return redirect('backend:categories')
     return render(request, template_name='categories/category_form.html', context={'form':form})
 
+@login_required(login_url="/login/")
 def edit_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
     form = CategoryForm(request.POST or None, instance=category)
@@ -22,6 +25,7 @@ def edit_category(request, slug):
         return redirect('backend:categories')
     return render(request, template_name='categories/category_form.html', context={'form':form})
 
+@login_required(login_url="/login/")
 def delete_category(request, slug):
     slug = get_object_or_404(Category, slug=slug)
     if request.method == 'POST':
@@ -29,14 +33,17 @@ def delete_category(request, slug):
         return redirect('backend:categories')
     return render(request, 'categories/category_delete.html', {'object':slug})
 
+@login_required(login_url="/login/")
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'categories/category_list.html', {'categories':categories})
 
+@login_required(login_url="/login/")
 def pins_list(request):
     pins = Pin.objects.all()
     return render(request, 'pins/pins_list.html', {'pins':pins})
 
+@login_required(login_url="/login/")
 def create_pin(request):
     form = PinForm(request.POST, request.FILES)
     if form.is_valid():
@@ -44,6 +51,7 @@ def create_pin(request):
         return redirect('backend:pins_list')
     return render(request, template_name='pins/pins_form.html', context={'form':form})
 
+@login_required(login_url="/login/")
 def edit_pin(request, slug):
     pin = get_object_or_404(Pin, slug=slug)
     form = PinForm(request.POST or None, request.FILES or None,  instance=pin)
@@ -52,3 +60,11 @@ def edit_pin(request, slug):
         edit.save()
         return redirect('backend:pins_list')
     return render(request, template_name='pins/pins_form.html', context={'form':form})
+
+@login_required(login_url="/login/")
+def delete_pin(request, slug):
+    slug = get_object_or_404(Pin, slug=slug)
+    if request.method == 'POST':
+        slug.delete()
+        return redirect('backend:pins_list')
+    return render(request, 'pins/pin_delete.html', {'object':slug})

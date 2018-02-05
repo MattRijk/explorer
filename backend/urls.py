@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from backend.views import index, create_user, edit_user, delete_user
 from pins.views import create_category, edit_category, delete_category, category_list
-from pins.views import create_pin, edit_pin, pins_list
+from pins.views import create_pin, edit_pin, delete_pin, pins_list
 
 
 urlpatterns = [
@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'^pins/$', view=pins_list, name='pins_list'),
     url(r'^pins/create/', view=create_pin, name='createPin'),
     url(r'^pins/edit/(?P<slug>[\w-]+)/$', view=edit_pin, name='editPins'),
+    url(r'^pins/delete/(?P<slug>[\w-]+)/$', view=delete_pin, name='deletePins'),
 
 ]

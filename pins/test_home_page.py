@@ -1,28 +1,10 @@
 from django.test import TestCase, Client
+from django.template import Context, Template
 from django.test import LiveServerTestCase
 from selenium import webdriver
-import requests
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pins.models import Category, Pin
-
-class ImageTest(LiveServerTestCase):
-    def setUp(self):
-        self.browser = webdriver.PhantomJS('/usr/local/bin/phantomjs')
-        self.browser.set_window_size(1120, 550)
-        self.browser.get(self.live_server_url + '/')
-
-    # def test_image_on_home_page(self):
-    #     # check keeps incrementing
-    #     src = self.browser.find_element_by_class_name('pin-image').get_attribute('src')
-    #     print(src)
-    #     self.assertEqual('pin-image', src)
-    #     self.assertEqual('http://localhost:80', str(self.browser.current_url)[:-3])
-
-
-    def tearDown(self):
-        self.browser.quit()
-
 
 class HomePageViewTest(TestCase):
     def setUp(self):
@@ -33,7 +15,6 @@ class HomePageViewTest(TestCase):
         self.assertIn('home page', str(response.content))
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, 'home.html')
-
 
     def test_category_list_exist_on_home_page(self):
         Category.objects.create(title='category one')
@@ -62,7 +43,6 @@ class HomePageViewTest(TestCase):
         ]
         self.assertIn('1936-a-street-in-amsterdam', queryset)
 
-
     # get pin image to display
     def test_can_get_image(self):
          Category.objects.create(title='category one')
@@ -80,6 +60,10 @@ class HomePageViewTest(TestCase):
                      for pin in category.pin_set.all()
          ]
          self.assertEqual('4904736510', queryset[0].strip('/images/uploads/')[:10])
+
+
+
+
 
 
 

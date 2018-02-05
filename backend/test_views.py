@@ -75,6 +75,10 @@ class AdminCategoryViewTests(TestCase):
 
 class DashboardPinViewTest(TestCase):
 
+    def setUp(self):
+        self.client = Client()
+        self.superuserLoggedIn(username='auser', email='auser1234@yahoo.com')
+
     def test_pins_link_on_dashboard(self):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Pins</a>' % reverse("backend:pins_list"), html=True)
@@ -112,11 +116,11 @@ class DashboardPinViewTest(TestCase):
 
     def test_pin_create_view(self):
         response = self.client.get(reverse('backend:pins_list'))
-        self.assertNotIn('4904795089', str(response.content))
+        self.assertNotIn('4904752316', str(response.content))
         category = Category.objects.create(title='Amsterdam')
         title = '1930 a view of the zwanenburgwal in amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904795016.jpg'
-        image = SimpleUploadedFile(name='4904795016.jpg', content=open(path, 'rb').read(),
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904752316.jpg'
+        image = SimpleUploadedFile(name='4904752316.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         redirect = self.client.post('/backend/pins/create/',data = {'title':title,'image':image, 'note':note, 'category':category.id})
@@ -125,15 +129,14 @@ class DashboardPinViewTest(TestCase):
         self.assertIn('1930 a view of the zwanenburgwal in amsterdam', str(response.content))
         self.assertTemplateUsed(response, 'pins/pins_list.html')
 
-
     def test_pin_edit_view(self):
         # create two categories
         Category.objects.create(title='Amsterdam')
         Category.objects.create(title='Rotterdam')
         # pin 1
         title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742124.jpg'
-        image = SimpleUploadedFile(name='4904742124.jpg', content=open(path, 'rb').read(),
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742524.jpg'
+        image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         category = Category.objects.get(pk=1)
@@ -166,6 +169,43 @@ class DashboardPinViewTest(TestCase):
         response = self.client.get(reverse('backend:pins_list'))
         self.assertIn('1935-a-view-of-the-zaandammerplein', str(response.content))
         self.assertTemplateUsed(response, 'pins/pins_list.html')
+
+    def test_pin_delete_view(self):
+        Category.objects.create(title='Amsterdam')
+        title = '1936 A Street in Amsterdam'
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742524.jpg'
+        image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        note = 'a short description about the image'
+        category = Category.objects.get(pk=1)
+        # create pin
+        p = Pin.objects.create(title=title, image=image, note=note, category=category)
+        p.save()
+
+        response = self.client.get(reverse('backend:pins_list'))
+        self.assertIn('1936-a-street-in-amsterdam', str(response.content))
+
+        redirect = self.client.post('/backend/pins/delete/1936-a-street-in-amsterdam/')
+        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'),status_code=302, target_status_code=200)
+        response = self.client.get(reverse('backend:pins_list'))
+        self.assertNotIn('1936-a-street-in-amsterdam', str(response.content))
+        self.assertTemplateUsed(response, 'pins/pins_list.html')
+
+    def create_superuser(self, username, email):
+        user = User(username=username, email='', is_superuser=True)
+        user.set_password('passphrase')  # can't set above because of hashing
+        user.save()  # needed to save to temporary test db
+
+    def superuserLoggedIn(self, username, email):
+        self.create_superuser(username=username, email=email)
+        login, response = self.loggedIn(username=username, email=email)
+        return login, response
+
+    def loggedIn(self, username, email):
+        response = self.client.get('/login/')
+        login = self.client.login(username=username, email=email, password='passphrase')
+        return login, response
+
 
 
 

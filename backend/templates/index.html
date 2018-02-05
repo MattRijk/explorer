@@ -4,10 +4,10 @@
 {% load i18n %}
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 {% block content %}
-<h1>dashboard</h1>
+<h1>Admin Dashboard</h1>
 {% if user.is_authenticated %}
     <p>{{ user.get_username }} is logged in.</p>
-{% endif %}
+
 <div>
     <a href="{% url 'backend:categories' %}">Categories</a><br>
     <a href="{% url 'backend:createCategory' %}">Create Category</a>
@@ -59,7 +59,6 @@
 </table>
 {% endif %}
 <br>
-{% if user.is_superuser %}
 <form method="post" action="{% url 'account_logout' %}">
   {% csrf_token %}
   {% if redirect_field_value %}
