@@ -5,9 +5,18 @@
     <title>home page</title>
 </head>
 <body>
-home page
-{% for category in categories %}
- {{ category.title }}
-{% endfor %}
+home page<br>
+{% block content %}
+    {% for category in categories %}
+<br>
+     {{ category.title }}<br>
+    pins in category<br>
+     {% for pin in category.pin_set.all %}
+        {{ pin.slug }}<br>
+        {{ pin.image.url }}<br>
+        <img src="{{ pin.image.url }}" width="100" height="100"><br>
+     {% endfor %}<br>
+    {% endfor %}
+{% endblock content %}
 </body>
 </html>

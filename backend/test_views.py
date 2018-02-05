@@ -115,8 +115,8 @@ class DashboardPinViewTest(TestCase):
         self.assertNotIn('4904795089', str(response.content))
         category = Category.objects.create(title='Amsterdam')
         title = '1930 a view of the zwanenburgwal in amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904795089.jpg'
-        image = SimpleUploadedFile(name='4904795089.jpg', content=open(path, 'rb').read(),
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904795016.jpg'
+        image = SimpleUploadedFile(name='4904795016.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         redirect = self.client.post('/backend/pins/create/',data = {'title':title,'image':image, 'note':note, 'category':category.id})
@@ -132,8 +132,8 @@ class DashboardPinViewTest(TestCase):
         Category.objects.create(title='Rotterdam')
         # pin 1
         title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742160.jpg'
-        image = SimpleUploadedFile(name='.jpg', content=open(path, 'rb').read(),
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742124.jpg'
+        image = SimpleUploadedFile(name='4904742124.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         category = Category.objects.get(pk=1)
@@ -166,6 +166,8 @@ class DashboardPinViewTest(TestCase):
         response = self.client.get(reverse('backend:pins_list'))
         self.assertIn('1935-a-view-of-the-zaandammerplein', str(response.content))
         self.assertTemplateUsed(response, 'pins/pins_list.html')
+
+
 
 
 

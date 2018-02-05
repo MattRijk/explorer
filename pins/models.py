@@ -1,15 +1,7 @@
-from django.db import models
-
-import os
-
 import uuid
-import os
-
-
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
-from Explorer.settings import MEDIA_ROOT
 
 
 class Category(models.Model):

@@ -1,0 +1,87 @@
+from django.test import TestCase, Client
+from django.test import LiveServerTestCase
+from selenium import webdriver
+import requests
+from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
+from pins.models import Category, Pin
+
+class ImageTest(LiveServerTestCase):
+    def setUp(self):
+        self.browser = webdriver.PhantomJS('/usr/local/bin/phantomjs')
+        self.browser.set_window_size(1120, 550)
+        self.browser.get(self.live_server_url + '/')
+
+    # def test_image_on_home_page(self):
+    #     # check keeps incrementing
+    #     src = self.browser.find_element_by_class_name('pin-image').get_attribute('src')
+    #     print(src)
+    #     self.assertEqual('pin-image', src)
+    #     self.assertEqual('http://localhost:80', str(self.browser.current_url)[:-3])
+
+
+    def tearDown(self):
+        self.browser.quit()
+
+
+class HomePageViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_home_page_success(self):
+        response = self.client.get(reverse('homepage'))
+        self.assertIn('home page', str(response.content))
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'home.html')
+
+
+    def test_category_list_exist_on_home_page(self):
+        Category.objects.create(title='category one')
+        Category.objects.create(title='category two')
+        response = self.client.get(reverse('homepage'))
+        self.assertEqual(200, response.status_code)
+        self.assertIn('category one', str(response.content))
+        self.assertIn('category two', str(response.content))
+        self.assertIn('category one', [category.title for category in
+                                       response.context['categories']])
+
+    def test_list_of_category_pins_on_home_page(self):
+        Category.objects.create(title='category one')
+        category = Category.objects.get(title='category one')
+        title = '1936 A Street in Amsterdam'
+        path = '/home/matt/Documents/Explorer/media/ImageTest/4904741066.jpg'
+        image = SimpleUploadedFile(name='4904741066.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        note = 'a short description about the image'
+        Pin.objects.create(title=title, image=image, note=note, category=category)
+        response = self.client.get(reverse('homepage'))
+        self.assertEqual(200, response.status_code)
+        queryset = [pin.slug for category in
+                 response.context['categories']
+                 for pin in category.pin_set.all()
+        ]
+        self.assertIn('1936-a-street-in-amsterdam', queryset)
+
+
+    # get pin image to display
+    def test_can_get_image(self):
+         Category.objects.create(title='category one')
+         category = Category.objects.get(title='category one')
+         title = '1936 A Street in Amsterdam'
+         path = '/home/matt/Documents/Explorer/media/ImageTest/4904736510.jpg'
+         image = SimpleUploadedFile(name='4904736510.jpg', content=open(path, 'rb').read(),
+                                    content_type='image/jpeg')
+         note = 'a short description about the image'
+         Pin.objects.create(title=title, image=image, note=note, category=category)
+         response = self.client.get(reverse('homepage'))
+         self.assertEqual(200, response.status_code)
+         queryset = [pin.image.url for category in
+                     response.context['categories']
+                     for pin in category.pin_set.all()
+         ]
+         self.assertEqual('4904736510', queryset[0].strip('/images/uploads/')[:10])
+
+
+
+
+

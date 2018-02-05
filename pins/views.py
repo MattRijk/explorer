@@ -33,7 +33,6 @@ def category_list(request):
     categories = Category.objects.all()
     return render(request, 'categories/category_list.html', {'categories':categories})
 
-
 def pins_list(request):
     pins = Pin.objects.all()
     return render(request, 'pins/pins_list.html', {'pins':pins})

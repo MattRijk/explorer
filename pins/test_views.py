@@ -10,11 +10,11 @@ class CategoryViewTest(TestCase):
         self.client = Client()
 
     def test_category_list(self):
-        Category.objects.create(title='Category One')
-        Category.objects.create(title='Category Two')
+        Category.objects.create(title='category one')
+        Category.objects.create(title='category two')
         response = self.client.get(reverse('homepage'))
-        self.assertIn('Category One', str(response.content))
-        self.assertIn('Category Two', str(response.content))
+        self.assertIn('category one', str(response.content))
+        self.assertIn('category two', str(response.content))
 
 class PinViewsTest(TestCase):
 
