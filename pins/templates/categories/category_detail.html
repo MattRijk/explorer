@@ -1,0 +1,10 @@
+<div>
+    {{ category.title }}<br>
+    {% for pin in category.pin_set.all %}
+        <a href="{% url 'pins:pin_detail' category.slug pin.slug %}">
+          <img class="pin-image" src="{{ pin.image.url }}" width="100" height="100">
+        </a>
+    {% endfor %}
+    <br>
+    {{ category.pin_set.all.count }} Images
+</div>

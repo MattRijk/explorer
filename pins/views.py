@@ -4,7 +4,7 @@ from pins.forms import CategoryForm, PinForm
 from pins.models import Category, Pin
 
 
-def homepage(requests):
+def home_page(requests):
     categories = Category.objects.all()
     return render(requests, template_name='home.html', context={'categories': categories})
 
@@ -34,7 +34,7 @@ def delete_category(request, slug):
     return render(request, 'categories/category_delete.html', {'object':slug})
 
 @login_required(login_url="/login/")
-def admin_category_list(request):
+def category_list(request):
     categories = Category.objects.all()
     return render(request, 'categories/category_list.html', {'categories':categories})
 
@@ -69,9 +69,9 @@ def delete_pin(request, slug):
         return redirect('backend:pins_list')
     return render(request, 'pins/pin_delete.html', {'object':slug})
 
-# def category_list(request):
-#     categories = Category.objects.all()
-#     return render(request, 'categories/category_list.html', {'categories':categories})
+def category_detail(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    return render(request, 'categories/category_detail.html', {'category':category})
 
 def pin_detail(request, **kwargs):
     category = get_object_or_404(Category, slug=kwargs.get('category'))
