@@ -6,10 +6,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from pins.views import homepage
 
 urlpatterns = [
-    url(r'^', include('allauth.urls')),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^$', view=homepage, name='homepage'),
     url(r'^backend/', include('backend.urls', namespace='backend')),
-    url(r'^pins/', include('pins.urls', namespace='pins')),
+    url(r'^', include('pins.urls', namespace='pins')),
     url(r'^admin/', admin.site.urls),
 ]
 

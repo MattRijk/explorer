@@ -17,25 +17,26 @@ class UserAccountViewTests(TestCase):
         self.assertTemplateUsed(response, 'index.html')
 
     def test_superuser_can_login(self):
-        self.assertEqual(200, self.response.status_code)
-        self.assertTrue(self.authenticated)
-        self.assertTemplateUsed('index.html')
         response = self.client.get(reverse('backend:index'))
+        self.assertTrue(self.authenticated)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed('backend/index.html')
         self.assertIn('auser', str(response.content))
 
     def test_user_exists(self):
         self.save_user(username='buser', email='buser1234@yahoo.com')
-        self.assertEqual(200, self.response.status_code)
-        self.assertTrue(self.authenticated)
-        self.assertTemplateUsed('index.html')
         response = self.client.get(reverse('backend:index'))
+        self.assertTrue(self.authenticated)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed('index.html')
+        # response = self.client.get(reverse('backend:index'))
         self.assertIn('buser', str(response.content))
 
     def test_superuser_can_edit_superuser(self):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Edit</a>' % reverse("backend:editUser", args=[1]), html=True)
-        self.assertEqual(200, self.response.status_code)
         self.assertTrue(self.authenticated)
+        self.assertEqual(200, response.status_code)
         self.assertTemplateUsed('index.html')
         self.assertIn('auser', str(response.content))
         self.client.post('/backend/user/edit/1',
@@ -50,18 +51,19 @@ class UserAccountViewTests(TestCase):
         response = self.client.get(reverse('backend:index'))
         self.assertContains(response, '<a href="%s">Create Superuser</a>' % reverse("backend:createUser"), html=True)
         self.assertIn('Create Superuser', str(response.content))
+        self.assertTrue(self.authenticated)
         self.client.post('/backend/user/create/', data={'username': 'some_user',
                                'email':'superuser2@yahoo.com',
                                'password1':'passphrase', 'password2':'passphrase',
                                'is_superuser': True})
         response = self.client.get(reverse('backend:index'))
-        self.assertTrue(self.authenticated)
         self.assertIn('some_user', str(response.content))
 
     def test_superuser_can_edit_active_user(self):
         self.save_user(username='buser', email='buser1234@yahoo.com')
-        self.assertEqual(200, self.response.status_code)
+        response = self.client.get(reverse('backend:index'))
         self.assertTrue(self.authenticated)
+        self.assertEqual(200, response.status_code)
         self.assertTemplateUsed('index.html')
         self.assertIn('buser', str(self.client.get(reverse('backend:index')).content))
         self.assertIn('buser1234@yahoo.com', str(self.client.get(reverse('backend:index')).content))
@@ -74,8 +76,9 @@ class UserAccountViewTests(TestCase):
 
     def test_superuser_can_delete_active_user(self):
         self.save_user(username='buser', email='buser1234@yahoo.com')
-        self.assertEqual(200, self.response.status_code)
+        response = self.client.get(reverse('backend:index'))
         self.assertTrue(self.authenticated)
+        self.assertEqual(200, response.status_code)
         self.assertTemplateUsed('index.html')
         response = self.client.get(reverse('backend:index'))
         self.assertIn('buser', str(response.content))
@@ -100,7 +103,7 @@ class UserAccountViewTests(TestCase):
         return login, response
 
     def loggedIn(self, username, email):
-        response = self.client.get('/login/')
+        response = self.client.get('/account/login/')
         login = self.client.login(username=username, email=email, password='passphrase')
         return login, response
 

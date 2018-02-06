@@ -67,7 +67,7 @@ class PinViewsTest(TestCase):
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         pin = Pin.objects.create(title=title, image=image, note=note, category=category)
-        response = self.client.get('/pins/%s/' % (pin.slug,))
+        response = self.client.get('/%s/%s/' % (category.slug, pin.slug,))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pins/pin_detail.html')
 

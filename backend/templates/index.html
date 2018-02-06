@@ -34,13 +34,12 @@
     <td>{{ user.email }}</td>
     <td><a href="{% url 'backend:editUser' pk=user.pk %}">Edit</a></td>
     <td><a href="{% url 'backend:deleteUser' pk=user.pk %}">Delete</a></td>
-
   </tr>
   {% endfor %}
 </table>
 <br/>
 <table>
-  <b>Active Users</b>><br>
+  <b>Active Users</b><br>
   <tr>
     <th>Username</th>
     <th>Email Address</th>

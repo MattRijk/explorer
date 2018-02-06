@@ -34,7 +34,7 @@ def delete_category(request, slug):
     return render(request, 'categories/category_delete.html', {'object':slug})
 
 @login_required(login_url="/login/")
-def category_list(request):
+def admin_category_list(request):
     categories = Category.objects.all()
     return render(request, 'categories/category_list.html', {'categories':categories})
 
@@ -69,9 +69,11 @@ def delete_pin(request, slug):
         return redirect('backend:pins_list')
     return render(request, 'pins/pin_delete.html', {'object':slug})
 
-def pin_detail(request, slug):
-    try:
-        pin = get_object_or_404(Pin, slug=slug)
-    except Pin.MultipleObjectsReturned:
-        pin = Pin.objects.filter(slug=slug).order_by('-title').first()
-    return render(request, template_name='pins/pin_detail.html', context={'pin':pin})
+# def category_list(request):
+#     categories = Category.objects.all()
+#     return render(request, 'categories/category_list.html', {'categories':categories})
+
+def pin_detail(request, **kwargs):
+    category = get_object_or_404(Category, slug=kwargs.get('category'))
+    pin = get_object_or_404(Pin, slug=kwargs.get('slug'))
+    return render(request=request, template_name='pins/pin_detail.html', context={'pin': pin, 'category': category})
