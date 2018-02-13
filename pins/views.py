@@ -77,3 +77,7 @@ def pin_detail(request, **kwargs):
     category = get_object_or_404(Category, slug=kwargs.get('category'))
     pin = get_object_or_404(Pin, slug=kwargs.get('slug'))
     return render(request=request, template_name='pins/pin_detail.html', context={'pin': pin, 'category': category})
+
+# def pin_detail(request, slug):
+#     pin = get_object_or_404(Pin, slug=slug)
+#     return render(request=request, template_name='pins/pin_detail.html', context={'pin': pin})

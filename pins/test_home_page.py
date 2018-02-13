@@ -22,7 +22,7 @@ class HomePageViewTest(TestCase):
         self.assertContains(response, 'category two')
         self.assertIn('category one', [category.title for category in
                                        response.context['categories']])
-        
+
     def test_all_image_page(self):
         Category.objects.create(title='category one')
         category = Category.objects.get(title='category one')

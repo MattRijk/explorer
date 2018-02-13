@@ -28,6 +28,7 @@ class Pin(models.Model):
     image = models.ImageField(upload_to='uploads/')
     slug = models.SlugField(max_length=200, blank=True, unique=False)
     note = models.TextField(max_length=500, blank=False)
+    source = models.URLField()
     published = models.DateTimeField(default=timezone.now)
     category = models.ForeignKey(Category)
 
