@@ -11,7 +11,8 @@
     <li><a>Search</a></li>
 </ul>
 {% for category in categories %}
-  <a href="{% url 'pins:category_detail' slug=category.slug %}">{{ category.title }}</a><br>
+  <a href="{% url 'pins:category_detail' slug=category.slug %}">{{ category.title }}</a>
+  {{ category.pin_set.all.count }} Images <br>
 {% endfor %}
 {% endblock content %}
 </body>

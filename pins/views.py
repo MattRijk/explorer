@@ -13,7 +13,7 @@ def create_category(request):
     form = CategoryForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('backend:categories')
+        return redirect('backend:admin_category_list')
     return render(request, template_name='categories/category_form.html', context={'form':form})
 
 @login_required(login_url="/login/")
@@ -22,7 +22,7 @@ def edit_category(request, slug):
     form = CategoryForm(request.POST or None, instance=category)
     if form.is_valid():
         form.save()
-        return redirect('backend:categories')
+        return redirect('backend:admin_category_list')
     return render(request, template_name='categories/category_form.html', context={'form':form})
 
 @login_required(login_url="/login/")
@@ -30,10 +30,14 @@ def delete_category(request, slug):
     slug = get_object_or_404(Category, slug=slug)
     if request.method == 'POST':
         slug.delete()
-        return redirect('backend:categories')
+        return redirect('backend:admin_category_list')
     return render(request, 'categories/category_delete.html', {'object':slug})
 
 @login_required(login_url="/login/")
+def admin_category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'categories/category_list.html', {'categories':categories})
+
 def category_list(request):
     categories = Category.objects.all()
     return render(request, 'categories/category_list.html', {'categories':categories})
