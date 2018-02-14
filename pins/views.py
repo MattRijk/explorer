@@ -8,6 +8,10 @@ def home_page(requests):
     categories = Category.objects.all()
     return render(requests, template_name='home.html', context={'categories': categories})
 
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'categories/category_list.html', {'categories':categories})
+
 @login_required(login_url="/login/")
 def create_category(request):
     form = CategoryForm(request.POST or None)
@@ -36,11 +40,7 @@ def delete_category(request, slug):
 @login_required(login_url="/login/")
 def admin_category_list(request):
     categories = Category.objects.all()
-    return render(request, 'categories/category_list.html', {'categories':categories})
-
-def category_list(request):
-    categories = Category.objects.all()
-    return render(request, 'categories/category_list.html', {'categories':categories})
+    return render(request, 'categories/admin_category_list.html', {'categories':categories})
 
 @login_required(login_url="/login/")
 def pins_list(request):
@@ -80,7 +80,7 @@ def category_detail(request, slug):
 def pin_detail(request, **kwargs):
     category = get_object_or_404(Category, slug=kwargs.get('category'))
     pin = get_object_or_404(Pin, slug=kwargs.get('slug'))
-    return render(request=request, template_name='pins/pin_detail.html', context={'pin': pin, 'category': category})
+    return render(request=request, template_name='pins/pin_detail.html', context={'pin':pin, 'category': category})
 
 def all_images(request):
     pins = Pin.objects.all()

@@ -29,7 +29,6 @@ class UserAccountViewTests(TestCase):
         self.assertTrue(self.authenticated)
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed('index.html')
-        # response = self.client.get(reverse('backend:index'))
         self.assertIn('buser', str(response.content))
 
     def test_superuser_can_edit_superuser(self):

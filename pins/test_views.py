@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, resolve
 from pins.models import Category, Pin
 
 
@@ -15,6 +15,18 @@ class CategoryViewTest(TestCase):
         response = self.client.get(reverse('home_page'))
         self.assertContains(response, 'category one')
         self.assertContains(response, 'category two')
+
+    def test_category_list_link_exists(self):
+        response = self.client.get(reverse('home_page'))
+        self.assertContains(response, '<a href="%s">Categories</a>' % reverse("category_list"), html=True)
+
+    def test_category_detail_link_exists(self):
+        Category.objects.create(title='category one')
+        category = Category.objects.get(slug='category-one')
+        response = self.client.get('/%s/' % (category.slug,))
+        self.assertEqual(response.context['category'].slug, 'category-one')
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'categories/category_detail.html')
 
 class PinViewsTest(TestCase):
 

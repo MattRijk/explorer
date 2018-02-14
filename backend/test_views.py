@@ -13,7 +13,7 @@ class AdminCategoryViewTests(TestCase):
 
     def test_can_get_category_list_template(self):
         response = self.client.get(reverse('backend:admin_category_list'))
-        self.assertTemplateUsed(response, 'categories/category_list.html')
+        self.assertTemplateUsed(response, 'categories/admin_category_list.html')
 
     def test_category_list_link(self):
         response = self.client.get(reverse('backend:index'))
@@ -37,7 +37,7 @@ class AdminCategoryViewTests(TestCase):
         self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'), status_code=302, target_status_code=200)
         response = self.client.get(reverse('backend:admin_category_list'))
         self.assertIn('category one', str(response.content))
-        self.assertTemplateUsed(response, 'categories/category_list.html')
+        self.assertTemplateUsed(response, 'categories/admin_category_list.html')
 
     def test_category_edit_view(self):
         Category.objects.create(title='category one')
@@ -45,7 +45,7 @@ class AdminCategoryViewTests(TestCase):
         self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'), status_code=302, target_status_code=200)
         response = self.client.get(reverse('backend:admin_category_list'))
         self.assertIn('category two', str(response.content))
-        self.assertTemplateUsed(response, 'categories/category_list.html')
+        self.assertTemplateUsed(response, 'categories/admin_category_list.html')
 
     def test_category_delete_view(self):
         Category.objects.create(title='category one')
@@ -55,7 +55,7 @@ class AdminCategoryViewTests(TestCase):
         self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'),status_code=302, target_status_code=200)
         response = self.client.get(reverse('backend:admin_category_list'))
         self.assertNotIn('category one', str(response.content))
-        self.assertTemplateUsed(response, 'categories/category_list.html')
+        self.assertTemplateUsed(response, 'categories/admin_category_list.html')
 
     def create_superuser(self, username, email):
         user = User(username=username, email='', is_superuser=True)
