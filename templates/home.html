@@ -7,7 +7,7 @@
 <ul>
     <li><a>Home</a></li>
     <li><a>Categories</a></li>
-    <li><a>All Images</a></li>
+    <li><a href="{% url 'pins:all_images' %}">All Images</a></li>
     <li><a>Search</a></li>
 </ul>
 {% for category in categories %}

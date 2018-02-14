@@ -23,27 +23,12 @@ class HomePageViewTest(TestCase):
         self.assertIn('category one', [category.title for category in
                                        response.context['categories']])
 
-    def test_all_image_page(self):
-        Category.objects.create(title='category one')
-        category = Category.objects.get(title='category one')
-        title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904736510.jpg'
-        image = SimpleUploadedFile(name='4904736510.jpg', content=open(path, 'rb').read(),
-                                    content_type='image/jpeg')
-        note = 'a short description about the image'
-        Pin.objects.create(title=title, image=image, note=note, category=category)
-        Category.objects.create(title='category two')
-        category = Category.objects.get(title='category one')
-        title = '1935 A Street in Rotterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904741066.jpg'
-        image = SimpleUploadedFile(name='4904741066.jpg', content=open(path, 'rb').read(),
-                                   content_type='image/jpeg')
-        note = 'another description about the image'
-        Pin.objects.create(title=title, image=image, note=note, category=category)
+    def test_all_image_link_on_home_page(self):
         response = self.client.get(reverse('home_page'))
-        self.assertEqual(200, response.status_code)
-        self.assertContains(response, 'category one')
-        self.assertContains(response, 'category two')
+        self.assertContains(response,'<a href="%s">All Images</a>' % reverse("pins:all_images"), html=True)
+
+
+
 
 
 

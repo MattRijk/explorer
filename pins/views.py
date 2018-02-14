@@ -78,6 +78,11 @@ def pin_detail(request, **kwargs):
     pin = get_object_or_404(Pin, slug=kwargs.get('slug'))
     return render(request=request, template_name='pins/pin_detail.html', context={'pin': pin, 'category': category})
 
-# def pin_detail(request, slug):
-#     pin = get_object_or_404(Pin, slug=slug)
-#     return render(request=request, template_name='pins/pin_detail.html', context={'pin': pin})
+def all_images(request):
+    pins = Pin.objects.all()
+    return render(request, 'pins/all_images.html', {'pins':pins})
+
+def pin_image(request, slug):
+    pin = get_object_or_404(Pin, slug=slug)
+    return render(request, 'pins/pin_detail.html', {'pin':pin})
+

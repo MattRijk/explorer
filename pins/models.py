@@ -45,6 +45,8 @@ class Pin(models.Model):
     def get_absolute_url(self):
         return reverse('pins:pin_detail', kwargs={'category':self.category.slug, 'slug': self.slug})
 
+    def get_image_url(self):
+        return reverse('pins:pin_image', kwargs={'slug': self.slug})
 
 
 

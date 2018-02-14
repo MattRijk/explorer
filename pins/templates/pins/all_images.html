@@ -1,0 +1,6 @@
+Pins
+{% for pin in pins %}
+<div>
+    <a href="{{ pin.get_image_url }}">{{ pin.title }}</a>
+</div>
+{% endfor %}
