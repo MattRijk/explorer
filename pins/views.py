@@ -14,7 +14,7 @@ def category_list(request):
 
 @login_required(login_url="/login/")
 def create_category(request):
-    form = CategoryForm(request.POST or None)
+    form = CategoryForm(request.POST, request.FILES)
     if form.is_valid():
         form.save()
         return redirect('backend:admin_category_list')
@@ -23,9 +23,10 @@ def create_category(request):
 @login_required(login_url="/login/")
 def edit_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    form = CategoryForm(request.POST or None, instance=category)
+    form = CategoryForm(request.POST or None, request.FILES or None,  instance=category)
     if form.is_valid():
-        form.save()
+        edit = form.save(commit=False)
+        edit.save()
         return redirect('backend:admin_category_list')
     return render(request, template_name='categories/category_form.html', context={'form':form})
 

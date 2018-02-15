@@ -6,8 +6,8 @@ from django.core.urlresolvers import reverse
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=200, blank=True, unique=True)
+    title = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=200, blank=True, unique=False)
     image = models.ImageField(upload_to='categories/')
     description = models.TextField(max_length=500)
 
