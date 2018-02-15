@@ -3,6 +3,8 @@ from django.test import TestCase,  Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pins.models import Category, Pin
 
+IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/images/'
+
 
 class CategoryModelTest(TestCase):
 
@@ -23,7 +25,7 @@ class PinModelTest(TestCase):
     def test_pin_save(self):
         category = Category.objects.create(title='Amsterdam')
         title = '1935 a view of the leidseplein in amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742524.jpg'
+        path = '%s4904742524.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'

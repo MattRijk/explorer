@@ -5,7 +5,11 @@ from pins.models import Category, Pin
 class CategoryForm(ModelForm):
     class Meta:
         model = Category
-        fields = ('title',)
+        fields = ('title','image','description')
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.fields['image'].required = False
 
 class PinForm(ModelForm):
     class Meta:

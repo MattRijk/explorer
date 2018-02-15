@@ -3,11 +3,17 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from pins.forms import CategoryForm, PinForm
 from pins.models import Category, Pin
 
+IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/images/'
+CATEGORY_IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/categories/'
 
 class CategoryFormTest(TestCase):
 
     def test_CategoryForm_valid(self):
-        form = CategoryForm(data={'title':'category one'})
+        path = '%scategory_one.jpg' % CATEGORY_IMAGE_TEST_PATH
+        image = SimpleUploadedFile(name='category_one.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        description='a short category description'
+        form = CategoryForm(data={'title':'category one', 'image':image, 'description':description})
         self.assertTrue(form.is_valid())
 
 class PinFormTest(TestCase):
@@ -16,7 +22,7 @@ class PinFormTest(TestCase):
         category_object.save()
         category = Category.objects.get(pk=1)
         title = '1938 a view of the lekstraat in the rivierenbuurt of amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904752316.jpg'
+        path = '%s4904752316.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904752316.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
@@ -28,7 +34,7 @@ class PinFormTest(TestCase):
         Category.objects.create(title="Rotterdam")
         category = Category.objects.get(pk=1)
         title = '1934 a view of the kijkduinstraat in amsterdam-west'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904752316.jpg'
+        path = '%s4904752316.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904752316.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'

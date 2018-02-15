@@ -1,7 +1,8 @@
 Pins
+
 {% for pin in pins %}
 <div>
-    {{ pin.title }}
+    <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}" width="75" height="75">{{ pin.title }}</a>
     <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a>
     <a href="{% url 'backend:deletePins' slug=pin.slug %}">Delete</a>
 </div>

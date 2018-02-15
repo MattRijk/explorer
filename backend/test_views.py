@@ -4,6 +4,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
 from pins.models import Category, Pin
 
+IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/images/'
+CATEGORY_IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/categories/'
 
 class AdminCategoryViewTests(TestCase):
 
@@ -32,17 +34,35 @@ class AdminCategoryViewTests(TestCase):
 
     def test_category_create_view(self):
         response = self.client.get(reverse('backend:admin_category_list'))
-        self.assertNotIn('category one', str(response.content))
-        redirect = self.client.post('/backend/categories/create/', data={'title': 'category one'})
+        self.assertNotIn('category three', str(response.content))
+        path = '%scategory_three.jpg' % CATEGORY_IMAGE_TEST_PATH
+        image = SimpleUploadedFile(name='category_three.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        description = 'a short category description.'
+        redirect = self.client.post('/backend/categories/create/',data= \
+        {'title':'category three', 'image':image, 'description':description})
         self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'), status_code=302, target_status_code=200)
         response = self.client.get(reverse('backend:admin_category_list'))
-        self.assertIn('category one', str(response.content))
+        self.assertContains(response, 'category three')
         self.assertTemplateUsed(response, 'categories/admin_category_list.html')
 
     def test_category_edit_view(self):
-        Category.objects.create(title='category one')
-        redirect = self.client.post('/backend/categories/edit/category-one/', data={'title':'category two'})
+        path = '%scategory_one.jpg' % CATEGORY_IMAGE_TEST_PATH
+        image = SimpleUploadedFile(name='category_one.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        description = 'a short category description.'
+        Category.objects.create(title='category one', image=image, description=description)
+        title = 'category two'
+        path = '%scategory_two.jpg' % CATEGORY_IMAGE_TEST_PATH
+        image = SimpleUploadedFile(name='category_two.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+
+        # use form and post request to pass new data
+        redirect = self.client.post('/backend/categories/edit/category-one/',
+                                    data={'title':title,'image':image,'description':'another description'})
+        # check for valid redirect
         self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'), status_code=302, target_status_code=200)
+        # refresh and check data
         response = self.client.get(reverse('backend:admin_category_list'))
         self.assertIn('category two', str(response.content))
         self.assertTemplateUsed(response, 'categories/admin_category_list.html')
@@ -73,7 +93,7 @@ class AdminCategoryViewTests(TestCase):
         return login, response
 
 
-class DashboardPinViewTest(TestCase):
+class AdminPinViewTest(TestCase):
 
     def setUp(self):
         self.client = Client()
@@ -94,14 +114,13 @@ class DashboardPinViewTest(TestCase):
     def test_pin_list_has_a_list_of_pins(self):
         category = Category.objects.create(title='Amsterdam')
         title1 = '1934 a view of the kijkduinstraat in amsterdam-west'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904795089.jpg'
+        path = '%s4904795089.jpg' % IMAGE_TEST_PATH
         note = 'a short description about the image'
-        from django.core.files.uploadedfile import SimpleUploadedFile
         image1 = SimpleUploadedFile(name='4904795089.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         title2 = '1936 a view of the leidsestraat in amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904777907.jpg'
-        from django.core.files.uploadedfile import SimpleUploadedFile
+        path = '%s4904777907.jpg' % IMAGE_TEST_PATH
+
         image2 = SimpleUploadedFile(name='4904777907.jpg', content=open(path, 'rb').read(),
                                     content_type='image/jpeg')
         Pin.objects.create(title=title1,image=image1, note=note, category=category)
@@ -119,7 +138,7 @@ class DashboardPinViewTest(TestCase):
         self.assertNotIn('4904752316', str(response.content))
         category = Category.objects.create(title='Amsterdam')
         title = '1930 a view of the zwanenburgwal in amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904752316.jpg'
+        path = '%s4904752316.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904752316.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
@@ -135,7 +154,7 @@ class DashboardPinViewTest(TestCase):
         Category.objects.create(title='Rotterdam')
         # pin 1
         title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742524.jpg'
+        path = '%s4904742524.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
@@ -153,7 +172,7 @@ class DashboardPinViewTest(TestCase):
                              target_status_code=200)
         # pin 2
         title = '1935 a view of the zaandammerplein'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904777907.jpg'
+        path = '%s4904777907.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = '1935 a view of the zaandammerplein is a square in the spaarndammerbuurt neighborhood of amsterdam-west'
@@ -173,7 +192,7 @@ class DashboardPinViewTest(TestCase):
     def test_pin_delete_view(self):
         Category.objects.create(title='Amsterdam')
         title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904742524.jpg'
+        path = '%s4904742524.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'

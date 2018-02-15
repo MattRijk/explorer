@@ -3,6 +3,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse, resolve
 from pins.models import Category, Pin
 
+IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/images/'
+CATEGORY_IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/categories/'
 
 class CategoryViewTest(TestCase):
 
@@ -10,8 +12,15 @@ class CategoryViewTest(TestCase):
         self.client = Client()
 
     def test_category_list_on_home_page(self):
-        Category.objects.create(title='category one')
-        Category.objects.create(title='category two')
+        path = '%scategory_one.jpg' % CATEGORY_IMAGE_TEST_PATH
+        image = SimpleUploadedFile(name='category_one.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        description='a short category description'
+        Category.objects.create(title='category one', image=image, description=description)
+        path = '%scategory_two.jpg' % CATEGORY_IMAGE_TEST_PATH
+        image = SimpleUploadedFile(name='category_two.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        Category.objects.create(title='category two', image=image, description=description)
         response = self.client.get(reverse('home_page'))
         self.assertContains(response, 'category one')
         self.assertContains(response, 'category two')
@@ -42,7 +51,7 @@ class PinViewsTest(TestCase):
         Category.objects.create(title='category one')
         category = Category.objects.get(title='category one')
         title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904741066.jpg'
+        path = '%s4904741066.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904741066.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
@@ -55,7 +64,7 @@ class PinViewsTest(TestCase):
         Category.objects.create(title='category one')
         category = Category.objects.get(title='category one')
         title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904741066.jpg'
+        path = '%s4904741066.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904741066.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
@@ -68,7 +77,7 @@ class PinViewsTest(TestCase):
         Category.objects.create(title='category one')
         category = Category.objects.get(title='category one')
         title = '1936 A Street in Amsterdam'
-        path = '/home/matt/Documents/Explorer/media/ImageTest/4904741066.jpg'
+        path = '%s4904741066.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904741066.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'

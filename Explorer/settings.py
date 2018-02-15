@@ -121,8 +121,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
 # /home/matt/Documents/Explorer/media/uploads
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = '/media/'
 
 # /home/matt/Documents/explorer_db/uploads
 # media_base = '/home/matt/Documents/explorer_db/'
@@ -130,9 +132,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # MEDIA_URL = '/media/'
 
 # /media/matt/Seagate Expansion Drive/explorer_db
-media_base = '/media/matt/Seagate Expansion Drive/explorer_db/'
-MEDIA_ROOT = os.path.join(media_base)
-MEDIA_URL = '/media/'
+# media_base = '/media/matt/Seagate Expansion Drive/explorer_db/'
+# MEDIA_ROOT = os.path.join(media_base)
+# MEDIA_URL = '/media/'
 
 # example path
 # uploads/4904720037.jpg

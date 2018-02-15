@@ -8,6 +8,8 @@ from django.core.urlresolvers import reverse
 class Category(models.Model):
     title = models.CharField(max_length=50, unique=True)
     slug = models.SlugField(max_length=200, blank=True, unique=True)
+    image = models.ImageField(upload_to='categories/')
+    description = models.TextField(max_length=500)
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -16,16 +18,13 @@ class Category(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-            super(Category, self).save(*args, **kwargs)
-        else:
-            super(Category, self).save(*args, **kwargs)
+        self.slug = slugify(self.title)
+        super(Category, self).save(*args, **kwargs)
 
 class Pin(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=250) # abbreviated note
-    image = models.ImageField(upload_to='uploads/')
+    image = models.ImageField(upload_to='images/')
     slug = models.SlugField(max_length=200, blank=True, unique=False)
     note = models.TextField(max_length=500, blank=False)
     source = models.URLField()
