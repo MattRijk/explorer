@@ -33,14 +33,14 @@ class UserAccountViewTests(TestCase):
 
     def test_superuser_can_edit_superuser(self):
         response = self.client.get(reverse('backend:index'))
-        self.assertContains(response, '<a href="%s">Edit</a>' % reverse("backend:editUser", args=[1]), html=True)
+        self.assertContains(response, '<a href="%s">Edit</a>' % reverse("backend:editUser", args=[1]),
+                            html=True)
         self.assertTrue(self.authenticated)
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed('index.html')
         self.assertIn('auser', str(response.content))
         self.client.post('/backend/user/edit/1',
-             data={'username':'auser', 'email':'auser5555@yahoo.com',
-                   'is_superuser':True})
+          data={'username':'auser', 'email':'auser5555@yahoo.com','is_superuser':True})
         response = self.client.get(reverse('backend:index'))
         self.assertTrue(self.authenticated)
         self.assertIn('auser', str(response.content))

@@ -19,5 +19,4 @@ urlpatterns = [
     url(r'^pins/create/', view=create_pin, name='createPin'),
     url(r'^pins/edit/(?P<slug>[\w-]+)/$', view=edit_pin, name='editPins'),
     url(r'^pins/delete/(?P<slug>[\w-]+)/$', view=delete_pin, name='deletePins'),
-
 ]

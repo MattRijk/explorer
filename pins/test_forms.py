@@ -7,7 +7,6 @@ IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/images/'
 CATEGORY_IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/categories/'
 
 class CategoryFormTest(TestCase):
-
     def test_CategoryForm_valid(self):
         path = '%scategory_one.jpg' % CATEGORY_IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='category_one.jpg', content=open(path, 'rb').read(),

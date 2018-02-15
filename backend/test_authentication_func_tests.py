@@ -35,7 +35,6 @@ class UserAuthenticationFunctionalTest(LiveServerTestCase):
         self.assertIn('muser', self.browser.page_source)
         self.assertIn('Sign Out', self.browser.page_source)
 
-
     def TearDown(self):
         self.browser.close()
 

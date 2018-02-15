@@ -39,9 +39,9 @@ class AdminCategoryViewTests(TestCase):
         image = SimpleUploadedFile(name='category_three.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         description = 'a short category description.'
-        redirect = self.client.post('/backend/categories/create/',data= \
-        {'title':'category three', 'image':image, 'description':description})
-        self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'), status_code=302, target_status_code=200)
+        redirect = self.client.post('/backend/categories/create/',
+          data={'title':'category three', 'image':image, 'description':description})
+        self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'),status_code=302,target_status_code=200)
         response = self.client.get(reverse('backend:admin_category_list'))
         self.assertContains(response, 'category three')
         self.assertTemplateUsed(response, 'categories/admin_category_list.html')
@@ -56,13 +56,9 @@ class AdminCategoryViewTests(TestCase):
         path = '%scategory_two.jpg' % CATEGORY_IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='category_two.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
-
-        # use form and post request to pass new data
         redirect = self.client.post('/backend/categories/edit/category-one/',
-                                    data={'title':title,'image':image,'description':'another description'})
-        # check for valid redirect
-        self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'), status_code=302, target_status_code=200)
-        # refresh and check data
+          data={'title':title,'image':image,'description':'another description'})
+        self.assertRedirects(redirect, expected_url=reverse('backend:admin_category_list'),status_code=302,target_status_code=200)
         response = self.client.get(reverse('backend:admin_category_list'))
         self.assertIn('category two', str(response.content))
         self.assertTemplateUsed(response, 'categories/admin_category_list.html')
@@ -120,7 +116,6 @@ class AdminPinViewTest(TestCase):
                                    content_type='image/jpeg')
         title2 = '1936 a view of the leidsestraat in amsterdam'
         path = '%s4904777907.jpg' % IMAGE_TEST_PATH
-
         image2 = SimpleUploadedFile(name='4904777907.jpg', content=open(path, 'rb').read(),
                                     content_type='image/jpeg')
         Pin.objects.create(title=title1,image=image1, note=note, category=category)
@@ -143,7 +138,7 @@ class AdminPinViewTest(TestCase):
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         redirect = self.client.post('/backend/pins/create/',data = {'title':title,'image':image, 'note':note, 'category':category.id})
-        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'), status_code=302, target_status_code=200)
+        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'),status_code=302,target_status_code=200)
         response = self.client.get(reverse('backend:pins_list'))
         self.assertIn('1930 a view of the zwanenburgwal in amsterdam', str(response.content))
         self.assertTemplateUsed(response, 'pins/pins_list.html')
@@ -152,25 +147,20 @@ class AdminPinViewTest(TestCase):
         # create two categories
         Category.objects.create(title='Amsterdam')
         Category.objects.create(title='Rotterdam')
-        # pin 1
         title = '1936 A Street in Amsterdam'
         path = '%s4904742524.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         category = Category.objects.get(pk=1)
-        # create pin
         p = Pin.objects.create(title=title, image=image, note=note, category=category)
         p.save()
-
         pin = Pin.objects.get(slug='1936-a-street-in-amsterdam') # don't edit image
         category = Category.objects.get(pk=2)
         title = '1934 a view of the kijkduinstraat in amsterdam-west'
         redirect = self.client.post('/backend/pins/edit/1936-a-street-in-amsterdam/',
-            data = {'title':title,'image':pin.image, 'note':'A new entry', 'category':category.id})
-        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'), status_code=302,
-                             target_status_code=200)
-        # pin 2
+          data = {'title':title,'image':pin.image, 'note':'A new entry', 'category':category.id})
+        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'),status_code=302,target_status_code=200)
         title = '1935 a view of the zaandammerplein'
         path = '%s4904777907.jpg' % IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
@@ -178,13 +168,10 @@ class AdminPinViewTest(TestCase):
         note = '1935 a view of the zaandammerplein is a square in the spaarndammerbuurt neighborhood of amsterdam-west'
         category = Category.objects.get(pk=1)
         pin = Pin.objects.create(title=title, image=image, note=note, category=category)
-
-        # edit pin
         category = Category.objects.get(pk=2)
         redirect = self.client.post('/backend/pins/edit/1934-a-view-of-the-kijkduinstraat-in-amsterdam-west/',
-            data = {'title':title,'image':pin.image,'note':note,'category':category.id})
-        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'), status_code=302,
-                             target_status_code=200)
+          data = {'title':title,'image':pin.image,'note':note,'category':category.id})
+        self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'),status_code=302,target_status_code=200)
         response = self.client.get(reverse('backend:pins_list'))
         self.assertIn('1935-a-view-of-the-zaandammerplein', str(response.content))
         self.assertTemplateUsed(response, 'pins/pins_list.html')
@@ -197,13 +184,10 @@ class AdminPinViewTest(TestCase):
                                    content_type='image/jpeg')
         note = 'a short description about the image'
         category = Category.objects.get(pk=1)
-        # create pin
         p = Pin.objects.create(title=title, image=image, note=note, category=category)
         p.save()
-
         response = self.client.get(reverse('backend:pins_list'))
         self.assertIn('1936-a-street-in-amsterdam', str(response.content))
-
         redirect = self.client.post('/backend/pins/delete/1936-a-street-in-amsterdam/')
         self.assertRedirects(redirect, expected_url=reverse('backend:pins_list'),status_code=302, target_status_code=200)
         response = self.client.get(reverse('backend:pins_list'))
