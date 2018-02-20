@@ -45,7 +45,7 @@ def admin_category_list(request):
 
 @login_required(login_url="/login/")
 def pins_list(request):
-    pins = Pin.objects.all()
+    pins = Pin.objects.all()[:150]
     return render(request, 'pins/pins_list.html', {'pins':pins})
 
 @login_required(login_url="/login/")
@@ -84,7 +84,9 @@ def pin_detail(request, **kwargs):
     return render(request=request, template_name='pins/pin_detail.html', context={'pin':pin, 'category': category})
 
 def all_images(request):
-    pins = Pin.objects.all()
+    import random
+    pins = sorted(Pin.objects.all(), key=lambda x: random.random())
+
     return render(request, 'pins/all_images.html', {'pins':pins})
 
 def pin_image(request, slug):

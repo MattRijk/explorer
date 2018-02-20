@@ -1,8 +1,27 @@
-Pins
+{% extends 'base.html' %}
+{% load static %}
+<script
+  src="http://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+</script>
+{% block content %}
+<a href="{% url 'backend:index' %}">backend</a><br>
 {% for pin in pins %}
 <div>
-    <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}" width="75" height="75">{{ pin.title }}</a>
+    <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}" width="75" height="75">
+        {{ pin.title|truncatewords:8}}</a>
     <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a>
     <a href="{% url 'backend:deletePins' slug=pin.slug %}">Delete</a>
 </div>
 {% endfor %}
+<script>
+if(!window.jQuery)
+{
+   var script = document.createElement('script');
+   script.type = "text/javascript";
+   script.src = "path/to/jQuery";
+   document.getElementsByTagName('head')[0].appendChild(script);
+}
+</script>
+{% endblock %}

@@ -1,8 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
 <html>
+
 <title>home page</title>
 
 <body>
 {% block content %}
+
 <h1>home page</h1>
 <ul>
     <li><a>Home</a></li>
@@ -11,12 +16,16 @@
     <li><a>Search</a></li>
 </ul>
 {% for category in categories %}
+  <h2>{{ category.title }}</h2>
   <a href="{% url 'pins:category_detail' slug=category.slug %}">
       <img class="category-image" src="{{ category.image.url }}" width="300" height="200">
-      <h2>{{ category.title }}</h2>
   </a>
+  <br>
   <span>{{ category.pin_set.all.count }} Images</span>
+ <br>
+ <br>
 {% endfor %}
-{% endblock content %}
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}
 </body>
 </html>

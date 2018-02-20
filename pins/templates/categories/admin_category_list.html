@@ -1,9 +1,10 @@
 <div>
+    <a href="{% url 'backend:index' %}">backend</a><br>
     <b>Categories</b>
     <a href="{% url 'backend:createCategory' %}">Create Category</a>
     {% for category in categories %}
         <div>
-            {{ category.title }}
+            <a href='{% url "pins:category_detail" category.slug %}'>{{ category.title }}</a>
             <a href="{% url 'backend:editCategory' slug=category.slug %}">Edit</a>
             <a href="{% url 'backend:deleteCategory' slug=category.slug %}">Delete</a>
             {{ category.pin_set.all.count }} Images

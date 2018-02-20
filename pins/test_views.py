@@ -30,7 +30,11 @@ class CategoryViewTest(TestCase):
         self.assertContains(response, '<a href="%s">Categories</a>' % reverse("category_list"), html=True)
 
     def test_category_detail_link_exists(self):
-        Category.objects.create(title='category one')
+        path = '%scategory_one.jpg' % CATEGORY_IMAGE_TEST_PATH
+        image = SimpleUploadedFile(name='category_one.jpg', content=open(path, 'rb').read(),
+                                   content_type='image/jpeg')
+        description='a short category description'
+        Category.objects.create(title='category one', image=image, description=description)
         category = Category.objects.get(slug='category-one')
         response = self.client.get('/%s/' % (category.slug,))
         self.assertEqual(response.context['category'].slug, 'category-one')

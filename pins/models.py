@@ -22,10 +22,10 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
 
 class Pin(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=250) # abbreviated note
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    title = models.CharField(max_length=500) # abbreviated note
     image = models.ImageField(upload_to='images/')
-    slug = models.SlugField(max_length=200, blank=True, unique=False)
+    slug = models.SlugField(max_length=1000, blank=True, unique=False)
     note = models.TextField(max_length=500, blank=False)
     source = models.URLField()
     published = models.DateTimeField(default=timezone.now)
@@ -42,10 +42,10 @@ class Pin(models.Model):
         super(Pin, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('pins:pin_detail', kwargs={'category':self.category.slug, 'slug': self.slug})
+        return reverse('pins:pin_detail', kwargs={'category':self.category.slug, 'slug':self.slug})
 
     def get_image_url(self):
-        return reverse('pins:pin_image', kwargs={'slug': self.slug})
+        return reverse('pins:pin_image', kwargs={'slug':self.slug})
 
 
 

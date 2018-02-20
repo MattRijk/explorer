@@ -1,6 +1,18 @@
-All Images
+{% extends 'base.html' %}
+{% load static %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{% block content %}
+
+<a href="{% url 'home_page' %}">home</a><br>
+{% load el_pagination_tags %}
+
+{% lazy_paginate pins %}
+All Images<br>
 {% for pin in pins %}
-<div>
-    <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}" width="75" height="75">{{ pin.title }}</a>
-</div>
+<a href="{{ pin.get_image_url }}">
+    <img class="pin-image" src="{{ pin.image.url }}" width="10%" height="20%">
+</a>
 {% endfor %}
+{% show_more %}
+{% endblock %}
