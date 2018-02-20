@@ -131,4 +131,4 @@ MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EL_PAGINATION_PER_PAGE = 800
+EL_PAGINATION_PER_PAGE = 600

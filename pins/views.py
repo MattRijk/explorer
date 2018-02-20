@@ -5,11 +5,11 @@ from pins.models import Category, Pin
 
 
 def home_page(requests):
-    categories = Category.objects.all()
+    categories = Category.objects.all()[1:]
     return render(requests, template_name='home.html', context={'categories': categories})
 
 def category_list(request):
-    categories = Category.objects.all()
+    categories = Category.objects.all()[1:]
     return render(request, 'categories/category_list.html', {'categories':categories})
 
 @login_required(login_url="/login/")
@@ -76,7 +76,8 @@ def delete_pin(request, slug):
 
 def category_detail(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    return render(request, 'categories/category_detail.html', {'category':category})
+    pins = category.pin_set.all()
+    return render(request, 'categories/category_detail.html', {'category':category, 'pins':pins})
 
 def pin_detail(request, **kwargs):
     category = get_object_or_404(Category, slug=kwargs.get('category'))

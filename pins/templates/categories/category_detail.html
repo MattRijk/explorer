@@ -1,12 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+{% load el_pagination_tags %}
 <div>
     <h4>{{ category.title }}</h4>
     <img class="category-image" src="{{ category.image.url }}" width="300" height="200">
     <p>{{ category.description }}</p>
     Images<br>
-    {% for pin in category.pin_set.all %}
+    {% paginate pins %}
+    {% for pin in pins %}
         <a href="{% url 'pins:pin_detail' category.slug pin.slug %}">
           <img class="pin-image" src="{{ pin.image.url }}" width="100" height="100">
         </a>
     {% endfor %}
     <br>
+    {% show_pages %}
 </div>
+{% endblock %}

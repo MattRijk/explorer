@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 {% block content %}
-
 <a href="{% url 'home_page' %}">home</a><br>
 {% load el_pagination_tags %}
 
@@ -14,5 +12,6 @@ All Images<br>
     <img class="pin-image" src="{{ pin.image.url }}" width="10%" height="20%">
 </a>
 {% endfor %}
-{% show_more %}
+{% get_pages %}
+{{ pages.previous }} {{ pages.next }}
 {% endblock %}
