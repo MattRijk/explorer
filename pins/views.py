@@ -5,11 +5,11 @@ from pins.models import Category, Pin
 
 
 def home_page(requests):
-    categories = Category.objects.all()[1:]
+    categories = Category.objects.all()
     return render(requests, template_name='home.html', context={'categories': categories})
 
 def category_list(request):
-    categories = Category.objects.all()[1:]
+    categories = Category.objects.all()
     return render(request, 'categories/category_list.html', {'categories':categories})
 
 @login_required(login_url="/login/")

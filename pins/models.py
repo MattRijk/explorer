@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
+from taggit.managers import TaggableManager
 
 
 class Category(models.Model):
@@ -21,15 +22,19 @@ class Category(models.Model):
         self.slug = slugify(self.title)
         super(Category, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('pins:category_detail', kwargs={'slug': self.slug})
+
+
 class Pin(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     title = models.CharField(max_length=500) # abbreviated note
     image = models.ImageField(upload_to='images/')
     slug = models.SlugField(max_length=1000, blank=True, unique=False)
     note = models.TextField(max_length=500, blank=False)
-    source = models.URLField()
+    source = models.URLField(blank=False)
     published = models.DateTimeField(default=timezone.now)
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, default=1)
+    tags = TaggableManager()
 
     class Meta:
         ordering = ('-published',)
@@ -46,6 +51,8 @@ class Pin(models.Model):
 
     def get_image_url(self):
         return reverse('pins:pin_image', kwargs={'slug':self.slug})
+
+#id = models.UUIDField(primary_key=True, default=uuid.uuid4)
 
 
 

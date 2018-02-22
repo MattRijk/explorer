@@ -15,7 +15,7 @@ class PinForm(ModelForm):
     class Meta:
         model = Pin
         category = ModelChoiceField(queryset=Category.objects.all().distinct(),widget=Select())
-        fields = ('title','image','note','category')
+        fields = ('title','image','note','source', 'category','tags')
 
     def __init__(self, *args, **kwargs):
         super(PinForm, self).__init__(*args, **kwargs)

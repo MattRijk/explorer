@@ -29,9 +29,11 @@ class PinModelTest(TestCase):
         image = SimpleUploadedFile(name='4904742524.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about the image'
-        Pin.objects.create(title=title, image=image, note=note, category=category)
+        pin = Pin.objects.create(title=title, image=image, note=note, category=category)
+        pin.tags.add('amsterdam', 'rotterdam')
         pin = Pin.objects.get(slug='1935-a-view-of-the-leidseplein-in-amsterdam')
         self.assertEqual(pin.slug, '1935-a-view-of-the-leidseplein-in-amsterdam')
+        self.assertIn('amsterdam', [p.slug for p in pin.tags.all()])
 
 
 

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'pins',
     'backend',
+    'taggit',
     'el_pagination',
 ]
 
@@ -74,7 +75,7 @@ WSGI_APPLICATION = 'Explorer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'explorer_db.sqlite3'), # 'explorer_db.sqlite3'
+        'NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'), # 'explorer_db.sqlite3'
     }
 }
 
