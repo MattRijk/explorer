@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from pins.forms import CategoryForm, PinForm
+from pins.forms import CategoryForm, PinForm, DataForm
 from pins.models import Category, Pin
+from django.views.generic import FormView
+from haystack.query import SearchQuerySet
 
 
 def home_page(requests):
@@ -45,7 +47,7 @@ def admin_category_list(request):
 
 @login_required(login_url="/login/")
 def pins_list(request):
-    pins = Pin.objects.all()[:150]
+    pins = Pin.objects.all()
     return render(request, 'pins/pins_list.html', {'pins':pins})
 
 @login_required(login_url="/login/")
@@ -63,6 +65,7 @@ def edit_pin(request, slug):
     if form.is_valid():
         edit = form.save(commit=False)
         edit.save()
+        form.save_m2m()
         return redirect('backend:pins_list')
     return render(request, template_name='pins/pins_form.html', context={'form':form})
 
@@ -94,3 +97,15 @@ def pin_image(request, slug):
     pin = get_object_or_404(Pin, slug=slug)
     return render(request, 'pins/pin_detail.html', {'pin':pin})
 
+def search(request):
+    search_query = SearchQuerySet().autocomplete(content_auto=request.POST.get('search_text',''))
+    return render(request, 'pins/search_page.html', {'search_query':search_query})
+
+class DataFormView(FormView):
+    template_name = 'upload/csv_upload.html'
+    form_class = DataForm
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.process_data()
+        return super().form_valid(form)

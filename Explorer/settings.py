@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'backend',
     'taggit',
     'el_pagination',
+    'haystack',
+    'whoosh',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +77,7 @@ WSGI_APPLICATION = 'Explorer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'), # 'explorer_db.sqlite3'
+        'NAME': os.path.join(BASE_DIR, 'explorer_db.sqlite3'), # 'explorer_db.sqlite3'
     }
 }
 
@@ -132,4 +134,12 @@ MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EL_PAGINATION_PER_PAGE = 600
+EL_PAGINATION_PER_PAGE = 200
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}

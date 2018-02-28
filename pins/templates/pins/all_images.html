@@ -5,13 +5,14 @@
 <a href="{% url 'home_page' %}">home</a><br>
 {% load el_pagination_tags %}
 
-{% lazy_paginate pins %}
+{% paginate pins %}{% get_pages %}
 All Images<br>
 {% for pin in pins %}
 <a href="{{ pin.get_image_url }}">
     <img class="pin-image" src="{{ pin.image.url }}" width="10%" height="20%">
 </a>
 {% endfor %}
-{% get_pages %}
-{{ pages.previous }} {{ pages.next }}
+{{ pages.current_start_index }}-{{ pages.current_end_index }} of
+{{ pages.total_count }}
+{{ pages.get_rendered }}
 {% endblock %}

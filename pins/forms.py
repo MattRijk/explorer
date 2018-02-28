@@ -1,4 +1,7 @@
-from django.forms import ModelForm, ModelChoiceField, Select
+import io
+import csv
+from django.core.files import File
+from django.forms import ModelForm, ModelChoiceField, Select, Form, FileField
 from pins.models import Category, Pin
 
 
@@ -20,3 +23,28 @@ class PinForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(PinForm, self).__init__(*args, **kwargs)
         self.fields['image'].required = False
+
+
+class DataForm(Form):
+    data_file = FileField()
+
+    def process_data(self):
+        csv_ = io.TextIOWrapper(self.cleaned_data['data_file'].file)
+        reader = csv.DictReader(csv_)
+
+        for cursor in reader:
+            category_id = Category.objects.get(pk=cursor['category'])
+            image_path= cursor['image']
+            pin = Pin.objects.create(title=cursor['title'], slug=cursor['slug'], published=cursor['published'], note=cursor['note'], source=cursor['source'], image=image_path, category=category_id)                      
+            if len(cursor['tag1']) > 0:
+                pin.tags.add(cursor['tag1'].strip())
+            if len(cursor['tag2']) > 0:
+                pin.tags.add(cursor['tag2'].strip())
+            if len(cursor['tag3']) > 0:
+                pin.tags.add(cursor['tag3'].strip())
+            if len(cursor['tag4']) > 0:
+                pin.tags.add(cursor['tag4'].strip())
+
+        csv_.close()
+
+

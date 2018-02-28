@@ -1,4 +1,8 @@
 <div>
     <img class="pin-image" src="{{ pin.image.url }}" >
-    <p>{{ pin.note }}</p>
+    <p>{{ pin.note }}
+        {% if pin.tags.all|length > 0 %}
+        #{{ pin.tags.all|join:", #"}}
+        {% endif %}
+    </p>
 </div>

@@ -125,7 +125,8 @@ class PinViewsTest(TestCase):
         image = SimpleUploadedFile(name='4904736510.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         note = 'a short description about ww2 in Amsterdam'
-        pin_3 = Pin.objects.create(title=title, image=image, note=note, category=category)
+        source = 'http://www.vintag.es/2015/11/amsterdam-flee-market-ca-1950s.html'
+        pin_3 = Pin.objects.create(title=title, image=image, note=note, source=source, category=category)
         pin_3.tags.add('amsterdam', 'rotterdam')
         response = self.client.get(reverse('pins:all_images'))
         self.assertEqual(200, response.status_code)

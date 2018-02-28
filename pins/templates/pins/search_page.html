@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search{% endblock %}
+{% block content %}
+<a href="{% url 'home_page' %}">home</a><br>
+
+{% if "query" in request.GET %}
+<h1>Posts containing "{{ cd.query }}"</h1>
+<p>Found {{ total_results }} result{{ total_results|pluralize }}</p>
+{% for result in results %}
+{% with pin=result.object %}
+<p><a href="{{ pin.get_absolute_url }}">{{ pin.title }}</a></p>
+{% endwith %}
+{% empty %}
+<p>There are no results for your query.</p>
+{% endfor %}
+<p><a href="{% url 'pins:search' %}">Search again</a></p>
+{% else %}
+<p>Search</p>
+<form action="." method="get">
+{{ form.as_p }}
+<input type="submit" value="Search">
+</form>
+{% endif %}
+{% endblock %}
+
+

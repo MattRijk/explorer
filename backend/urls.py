@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from backend.views import index, create_user, edit_user, delete_user
 from pins.views import  admin_category_list, create_category, edit_category, delete_category
-from pins.views import create_pin, edit_pin, delete_pin, pins_list
+from pins.views import create_pin, edit_pin, delete_pin, pins_list, DataFormView
 
 
 urlpatterns = [
@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^pins/create/', view=create_pin, name='createPin'),
     url(r'^pins/edit/(?P<slug>.+)/$', view=edit_pin, name='editPins'),
     url(r'^pins/delete/(?P<slug>.+)/$', view=delete_pin, name='deletePins'),
+
+    url(r'^csv-upload/$', DataFormView.as_view(), name='csv_upload'),
 ]
