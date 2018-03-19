@@ -1,0 +1,22 @@
+
+{% block title %}Search{% endblock %}
+{% block content %}
+{% if "query" in request.GET %}
+<h1>Results "{{ cleaned.query }}"</h1>
+<h3>Found: {{ total_count }}</h3>
+{% for result in results %}
+{% with post=result.object %}
+<h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+{{ post.body|truncatewords:5 }}
+{% endwith %}
+{% empty %}
+<p>There are no results for your query.</p>
+{% endfor %}
+
+<form action="/backend/search/" method="get">
+{{ form.as_p }}
+<input type="submit" value="Search">
+</form>
+
+{% endif %}
+{% endblock %}

@@ -1,11 +1,11 @@
 import datetime
 from haystack import indexes
 from pins.models import Pin, Category
+from taggit.models import Tag
 
 class PinIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     published = indexes.DateTimeField(model_attr='published')
-
     content_auto = indexes.EdgeNgramField(model_attr='title')
 
     def get_model(self):
@@ -17,7 +17,6 @@ class PinIndex(indexes.SearchIndex, indexes.Indexable):
 
 class CategoryIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
-
     content_auto = indexes.EdgeNgramField(model_attr='title')
 
     def get_model(self):
@@ -25,3 +24,14 @@ class CategoryIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         return self.get_model().objects.all()
+
+# class TagIndex(indexes.SearchIndex, indexes.Indexable):
+#     text = indexes.CharField(document=True, use_template=True)
+#     content_auto = indexes.EdgeNgramField(model_attr='name')
+#
+#     def get_model(self):
+#         return Tag
+#
+#     def index_queryset(self, using=None):
+#         return self.get_model().objects.all()
+

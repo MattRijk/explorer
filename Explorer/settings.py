@@ -24,12 +24,12 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'haystack',
+    'whoosh',
     'pins',
     'backend',
     'taggit',
-    'el_pagination',
-    'haystack',
-    'whoosh',
+    'el_pagination'
 ]
 
 MIDDLEWARE = [
@@ -115,22 +115,12 @@ STATICFILES_DIRS = (
     ("images", os.path.join(STATIC_ROOT,'images')),
 )
 
-# /home/matt/Documents/Explorer/media/uploads
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
-# MEDIA_URL = '/media/'
 
-# /home/matt/Documents/explorer_db/uploads
-# media_base = '/home/matt/Documents/explorer_db/'
-# MEDIA_ROOT = os.path.join(media_base)
-# MEDIA_URL = '/media/'
-
-#/media/matt/Seagate Expansion Drive/explorer_db
-media_base = '/media/matt/Seagate Expansion Drive/explorer_db/'
+#/media/super/Seagate Expansion Drive/explorer_db
+media_base = '/media/super/Seagate Expansion Drive/explorer_db/'
 MEDIA_ROOT = os.path.join(media_base)
 MEDIA_URL = '/media/'
 
-# example path
-# uploads/4904720037.jpg
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -140,6 +130,6 @@ EL_PAGINATION_PER_PAGE = 200
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index/'),
     },
 }

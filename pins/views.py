@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from pins.forms import CategoryForm, PinForm, DataForm
 from pins.models import Category, Pin
 from django.views.generic import FormView
-from haystack.query import SearchQuerySet
+
 
 
 def home_page(requests):
@@ -97,10 +97,6 @@ def pin_image(request, slug):
     pin = get_object_or_404(Pin, slug=slug)
     return render(request, 'pins/pin_detail.html', {'pin':pin})
 
-def search(request):
-    search_query = SearchQuerySet().autocomplete(content_auto=request.POST.get('search_text',''))
-    return render(request, 'pins/search_page.html', {'search_query':search_query})
-
 class DataFormView(FormView):
     template_name = 'upload/csv_upload.html'
     form_class = DataForm
@@ -109,3 +105,6 @@ class DataFormView(FormView):
     def form_valid(self, form):
         form.process_data()
         return super().form_valid(form)
+
+
+

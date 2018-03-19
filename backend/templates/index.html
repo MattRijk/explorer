@@ -2,6 +2,7 @@
 <html lang="en">
 {% extends "account/base.html" %}
 {% load i18n %}
+{% load static %}
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 {% block content %}
 <h1>Admin Dashboard</h1>
@@ -69,6 +70,15 @@
   {% endif %}
   <button type="submit">{% trans 'Sign Out' %}</button>
 </form>
+
+<h1>Search</h1>
+<form action="/backend/search/" method="get">
+{{ form.as_p }}
+<input type="submit" value="Search">
+</form>
+
+
+
 {% endif %}
 {% endblock %}
 </body>

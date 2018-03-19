@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
@@ -17,3 +18,6 @@ class CreateUserForm(UserCreationForm):
 
     def clean_password(self):
         return ""
+
+class SearchForm(forms.Form):
+    query = forms.CharField()

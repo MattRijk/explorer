@@ -2,7 +2,8 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
-from django.core.urlresolvers import reverse
+# from django.core.urlresolvers import reverse
+from django.urls import reverse
 from taggit.managers import TaggableManager
 
 
@@ -33,10 +34,11 @@ class Pin(models.Model):
     note = models.TextField(max_length=500, blank=False)
     source = models.URLField(blank=False)
     published = models.DateTimeField(default=timezone.now)
-    category = models.ForeignKey(Category, default=1)
+    category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)
     tags = TaggableManager()
 
     class Meta:
+        verbose_name_plural = "Pins"
         ordering = ('-published',)
 
     def __str__(self):
@@ -52,7 +54,7 @@ class Pin(models.Model):
     def get_image_url(self):
         return reverse('pins:pin_image', kwargs={'slug':self.slug})
 
-#id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+
 
 
 
