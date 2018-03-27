@@ -5,32 +5,32 @@ from django.contrib.auth.models import User
 from backend.forms import EditUserForm, CreateUserForm, SearchForm
 from pins.models import Category, Pin
 from django.db.models import Q
-
 from taggit.models import Tag
 from haystack.query import SearchQuerySet
 
-def pins_search(request):
+def search(request):
     form = SearchForm()
     cleaned, results, total_count = None, None, 0
-    if 'query' in request.GET:
+    if 'search' in request.GET:
         form = SearchForm(request.GET)
         if form.is_valid():
             cleaned = form.cleaned_data
-            if cleaned['query'].lower() == 'amsterdam':
+            if cleaned['search'].lower() == 'amsterdam':
                 results = ''
                 # possibly return message about searching for amsterdam
             else:
-                results = SearchQuerySet().filter(content=cleaned['query']).load_all()
+                results = SearchQuerySet().filter(content=cleaned['search']).load_all()
                 total_count = results.count()
     return render(request, 'search.html', {'form':form, 'cleaned':cleaned, 'results':results, 'total_count': total_count})
 
 
-
-def search_titles(request):pass
+# using whoosh with autocomplete
+# def search_titles(request):
 # def search_titles(request):
 #     pins = SearchQuerySet().autocomplete(content_auto=request.POST.get('search_text')).load_all()
 #     return render(request, 'search.html', {'pins': pins})
 
+# using django Q search
 # def search_titles(request):
 #     if request.method == "POST":
 #         search_text = request.POST['search_text']

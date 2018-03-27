@@ -2,8 +2,9 @@ from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pins.models import Category
+from Explorer.settings import BASE_DIR
 
-CATEGORY_IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/categories/'
+CATEGORY_IMAGE_TEST_PATH = ''.join([BASE_DIR,'/ImageTest/categories/'])
 
 class HomePageViewTest(TestCase):
     def setUp(self):
@@ -11,7 +12,7 @@ class HomePageViewTest(TestCase):
 
     def test_home_page_success(self):
         response = self.client.get(reverse('home_page'))
-        self.assertIn('home page', str(response.content))
+        self.assertIn('Historic Amsterdam', str(response.content))
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, 'home.html')
 
@@ -34,7 +35,8 @@ class HomePageViewTest(TestCase):
 
     def test_all_image_link_on_home_page(self):
         response = self.client.get(reverse('home_page'))
-        self.assertContains(response,'<a href="%s">All Images</a>' % reverse("pins:all_images"), html=True)
+        self.assertIn('<a href="%s">All Images</a>' % reverse("pins:all_images"), str(response.content))
+        self.assertTemplateUsed('home.html')
 
 
 

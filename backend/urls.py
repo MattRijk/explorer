@@ -1,13 +1,12 @@
 from django.conf.urls import url
-from backend.views import index, create_user, edit_user, delete_user, search_titles, pins_search
+from backend.views import index, create_user, edit_user, delete_user, search
 from pins.views import  admin_category_list, create_category, edit_category, delete_category
 from pins.views import create_pin, edit_pin, delete_pin, pins_list, DataFormView
 
 
 urlpatterns = [
     url(r'^$', view=index, name='index'),
-    # url(r'^search/$', search_titles, name='search_titles'),
-    url(r'^search/$', pins_search, name='search'),
+    url(r'^search/$', search, name='search'),
     url(r'^user/create/', view=create_user, name='createUser'),
     url(r'^user/edit/(?P<pk>\d+)$', view=edit_user, name='editUser'),
     url(r'^user/delete/(?P<pk>\d+)$', view=delete_user, name='deleteUser'),

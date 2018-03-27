@@ -9,7 +9,7 @@
 All Images<br>
 {% for pin in pins %}
 <a href="{{ pin.get_image_url }}">
-    <img class="pin-image" src="{{ pin.image.url }}" width="10%" height="20%">
+    <img class="pin-image" src="{{ pin.image.url }}">
 </a>
 {% endfor %}
 {{ pages.current_start_index }}-{{ pages.current_end_index }} of

@@ -1,10 +1,11 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pins.forms import CategoryForm, PinForm
-from pins.models import Category, Pin
+from pins.models import Category
+from Explorer.settings import BASE_DIR
 
-IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/images/'
-CATEGORY_IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/categories/'
+IMAGE_TEST_PATH = ''.join([BASE_DIR, '/ImageTest/images/'])
+CATEGORY_IMAGE_TEST_PATH = ''.join([BASE_DIR,'/ImageTest/categories/'])
 
 class CategoryFormTest(TestCase):
     def test_CategoryForm_valid(self):

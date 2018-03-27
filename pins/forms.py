@@ -5,9 +5,6 @@ from django.forms import ModelForm, ModelChoiceField, Select, Form, FileField
 from pins.models import Category, Pin
 
 
-class SearchForm(forms.Form):
-    query = forms.CharField()
-
 class CategoryForm(ModelForm):
     class Meta:
         model = Category

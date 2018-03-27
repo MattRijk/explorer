@@ -33,8 +33,7 @@ class UserAccountViewTests(TestCase):
 
     def test_superuser_can_edit_superuser(self):
         response = self.client.get(reverse('backend:index'))
-        self.assertContains(response, '<a href="%s">Edit</a>' % reverse("backend:editUser", args=[1]),
-                            html=True)
+        self.assertIn('<a href="%s">Edit</a>' % reverse("backend:editUser", args=[1]), str(response.content))
         self.assertTrue(self.authenticated)
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed('index.html')
@@ -48,8 +47,7 @@ class UserAccountViewTests(TestCase):
 
     def test_superuser_can_create_superuser(self):
         response = self.client.get(reverse('backend:index'))
-        self.assertContains(response, '<a href="%s">Create Superuser</a>' % reverse("backend:createUser"), html=True)
-        self.assertIn('Create Superuser', str(response.content))
+        self.assertIn('Add Super', str(response.content))
         self.assertTrue(self.authenticated)
         self.client.post('/backend/user/create/', data={'username': 'some_user',
                                'email':'superuser2@yahoo.com',
@@ -59,22 +57,10 @@ class UserAccountViewTests(TestCase):
         self.assertIn('some_user', str(response.content))
 
     def test_superuser_can_edit_active_user(self):
-        self.save_user(username='buser', email='buser1234@yahoo.com')
-        response = self.client.get(reverse('backend:index'))
-        self.assertTrue(self.authenticated)
-        self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed('index.html')
-        self.assertIn('buser', str(self.client.get(reverse('backend:index')).content))
-        self.assertIn('buser1234@yahoo.com', str(self.client.get(reverse('backend:index')).content))
-        response = self.client.get(reverse('backend:index'))
-        self.assertContains(response, '<a href="%s">Edit Active User</a>' % reverse("backend:editUser", args=[2]), html=True)
-        self.assertIn('Edit', str(self.client.get(reverse('backend:index')).content))
-        self.client.post('/backend/user/edit/2',
-             data={'username':'buser', 'email':'buser5555@yahoo.com', 'password':'passphrase'})
-        self.assertIn('buser5555@yahoo.com', str(self.client.get(reverse('backend:index')).content))
-
-    def test_superuser_can_delete_active_user(self):
-        self.save_user(username='buser', email='buser1234@yahoo.com')
+        self.client.post('/backend/user/create/', data={'username': 'buser',
+                               'email':'buser1234@yahoo.com',
+                               'password1':'passphrase', 'password2':'passphrase',
+                               'is_superuser': True})
         response = self.client.get(reverse('backend:index'))
         self.assertTrue(self.authenticated)
         self.assertEqual(200, response.status_code)
@@ -82,9 +68,29 @@ class UserAccountViewTests(TestCase):
         response = self.client.get(reverse('backend:index'))
         self.assertIn('buser', str(response.content))
         self.assertIn('buser1234@yahoo.com', str(response.content))
-        self.assertContains(response, '<a href="%s">Delete</a>' % reverse("backend:deleteUser", args=[1]), html=True)
+        self.assertIn('<a href="%s">Edit</a>' % reverse("backend:editUser", args=[2]), str(response.content))
+        self.client.post('/backend/user/edit/2',
+             data={'username':'buser', 'email':'buser5555@yahoo.com', 'password':'passphrase'})
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('buser5555@yahoo.com', str(response.content))
+
+    def test_superuser_can_delete_active_user(self):
+        # self.save_user(username='buser', email='buser1234@yahoo.com')
+        self.client.post('/backend/user/create/', data={'username': 'buser',
+                               'email':'buser1234@yahoo.com',
+                               'password1':'passphrase', 'password2':'passphrase',
+                               'is_superuser': True})
+        response = self.client.get(reverse('backend:index'))
+        self.assertTrue(self.authenticated)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed('index.html')
+        response = self.client.get(reverse('backend:index'))
+        self.assertIn('buser', str(response.content))
+        self.assertIn('buser1234@yahoo.com', str(response.content))
+        self.assertIn('<a href="%s">Delete</a>' % reverse("backend:deleteUser", args=[1]), str(response.content))
         self.client.post('/backend/user/delete/1')
         response = self.client.get(reverse('backend:index'))
+        self.assertNotIn('buser', str(response.content))
         self.assertNotIn('buser1234@yahoo.com', str(response.content))
 
     def save_user(self, username, email):

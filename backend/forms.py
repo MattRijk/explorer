@@ -20,4 +20,4 @@ class CreateUserForm(UserCreationForm):
         return ""
 
 class SearchForm(forms.Form):
-    query = forms.CharField()
+    search = forms.CharField()

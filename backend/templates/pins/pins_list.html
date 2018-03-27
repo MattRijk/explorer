@@ -3,6 +3,9 @@
 
 {% block content %}
 <a href="{% url 'backend:index' %}">backend</a><br>
+{% load el_pagination_tags %}
+
+{% paginate pins %}{% get_pages %}
 {% for pin in pins %}
 <div>
     <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}" width="10%" height="20%">
@@ -11,4 +14,7 @@
     <a href="{% url 'backend:deletePins' slug=pin.slug %}">Delete</a>
 </div>
 {% endfor %}
+{{ pages.current_start_index }}-{{ pages.current_end_index }} of
+{{ pages.total_count }}
+{{ pages.get_rendered }}
 {% endblock %}

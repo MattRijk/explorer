@@ -2,10 +2,11 @@ from django.test import TestCase, Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse, resolve
 from pins.models import Category, Pin
+from Explorer.settings import BASE_DIR
 
-IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/images/'
 
-CATEGORY_IMAGE_TEST_PATH = '/home/matt/Documents/Explorer/ImageTest/categories/'
+IMAGE_TEST_PATH = ''.join([BASE_DIR, '/ImageTest/images/'])
+CATEGORY_IMAGE_TEST_PATH = ''.join([BASE_DIR,'/ImageTest/categories/'])
 
 class CategoryViewTest(TestCase):
 
@@ -28,11 +29,12 @@ class CategoryViewTest(TestCase):
 
     def test_category_list_link_exists(self):
         response = self.client.get(reverse('home_page'))
-        self.assertContains(response, '<a href="%s">Categories</a>' % reverse("category_list"), html=True)
+        self.assertIn('<a href="%s">Categories</a>' % reverse("category_list"), str(response.content))
+        self.assertTemplateUsed('home.html')
 
     # get_rendered keeps printing when running tests
     def test_category_detail_get_absolute_url(self):
-        path = '/home/matt/Documents/Explorer/ImageTest/categories/category_one.jpg'
+        path = '%scategory_one.jpg' % CATEGORY_IMAGE_TEST_PATH
         image = SimpleUploadedFile(name='category_one.jpg', content=open(path, 'rb').read(),
                                    content_type='image/jpeg')
         description='a short category description'

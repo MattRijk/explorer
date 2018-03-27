@@ -1,22 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Search{% endblock %}
 {% block content %}
-{% if "query" in request.GET %}
-<h1>Results "{{ cleaned.query }}"</h1>
-<h3>Found: {{ total_count }}</h3>
+<section id="search-page">
+<form class="search-form" action="/backend/search/" method="get">
+{{ form.as_p }}
+<input type="submit" value="Submit">
+</form>
+{% if "search" in request.GET %}
+<p><b>Results "{{ cleaned.search }}"</b></p>
+<p><b>Found: {{ total_count }}</b></p>
 {% for result in results %}
-{% with post=result.object %}
-<h4><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
-{{ post.body|truncatewords:5 }}
-{% endwith %}
+<p>
+    <a href="{{ result.object.get_image_url }}">
+        <img class="pin-image" src="{{ result.object.image.url }}">
+        {{ result.object.title }}
+    </a>
+</p>
 {% empty %}
 <p>There are no results for your query.</p>
+</section>
 {% endfor %}
-
-<form action="/backend/search/" method="get">
-{{ form.as_p }}
-<input type="submit" value="Search">
-</form>
-
 {% endif %}
 {% endblock %}
