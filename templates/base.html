@@ -23,20 +23,35 @@
     <spacer id="spacer"></spacer>
 </nav>
 <nav id="child-nav">
-  <a href="">Home</a>
+<!--<form id="nav-search" action="">-->
+  <!--<input type="text" placeholder="Search.." name="search">-->
+  <!--<button type="submit">submit</button>-->
+<!--</form>-->
+<form action="/backend/search/" method="get" id="nav-search">
+{{ form.as_table }}
+<button type="submit">submit</button>
+</form>
+  <a href="{% url 'home_page' %}">Home</a>
   <a href="{% url 'category_list' %}">Categories</a>
   <a href="{% url 'pins:all_images' %}">All Images</a>
-  <a href="">Search</a>
+
 </nav>
-<div class="main">
+<main>
+<div class="content">
 {% block content %}
 {% endblock %}
 </div>
-<div class="banner">
-    <section>
-        <p>Banner ad 728 x 90</p>
-    </section>
+<div class="sidebar">
+    <div class="sidebar-ad">
+        <p>Vertical</p>
+        <p>Banner</p>
+        <p>120</p>
+        <p>x</p>
+        <p>240</p>
+    </div>
 </div>
+</main>
+
 <footer id="footer">
   <p>&copy; Edge Side Media</p>
   <a href="">Contact information</a>

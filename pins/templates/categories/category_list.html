@@ -1,9 +1,13 @@
-<a href="{% url 'home_page' %}">home</a><br>
-<div>
-    <b>Categories</b>
-    {% for category in categories %}
-        <div>
-            <a href='{% url "pins:category_detail" category.slug %}'>{{ category.title }}</a>
-        </div>
-    {% endfor %}
-</div>
+{% extends "base.html" %}
+{% block content %}
+
+
+<article>
+{% for category in categories %}
+    <div>
+        <a href='{% url "pins:category_detail" category.slug %}'>{{ category.title }}</a>
+    </div>
+{% endfor %}
+</article>
+
+{% endblock %}

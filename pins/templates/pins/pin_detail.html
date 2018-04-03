@@ -1,8 +1,15 @@
-<div>
-    <img class="pin-image" src="{{ pin.image.url }}" >
-    <p>{{ pin.note }}
-        {% if pin.tags.all|length > 0 %}
-        #{{ pin.tags.all|join:", #"}}
-        {% endif %}
-    </p>
-</div>
+{% extends 'base.html' %}
+{% block content %}
+<article class="pin-detail-container">
+    <div class="pin-detail">
+        <div class="pin-detail-image">
+            <img class="pin-image" src="{{ pin.image.url }}" >
+            <p>{{ pin.note }}
+                {% if pin.tags.all|length > 0 %}
+                #{{ pin.tags.all|join:", #"}}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</article>
+{% endblock %}

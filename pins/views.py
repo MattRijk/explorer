@@ -1,14 +1,20 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from pins.forms import CategoryForm, PinForm, DataForm
+from backend.forms import SearchForm
 from pins.models import Category, Pin
 from django.views.generic import FormView
 
 
 
+
 def home_page(requests):
+    form = SearchForm()
     categories = Category.objects.all()
-    return render(requests, template_name='home.html', context={'categories': categories})
+    if form.is_valid():
+        form =  ''
+    return render(requests, template_name='home.html', context={'categories': categories, 'form':form})
 
 def category_list(request):
     categories = Category.objects.all()
