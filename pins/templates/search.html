@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="search-page">
+{% if "search" in request.GET %}
+<p><b>Results "{{ cleaned.search }}"</b></p>
+<p><b>Found: {{ total_count }}</b></p>
+{% load el_pagination_tags %}
+{% paginate results %}{% get_pages %}
+{% for result in results %}
+<p class="pin-result-item">
+    <a href="{{ result.object.get_image_url }}" class="image-result-text">
+        <img class="image-result" src="{{ result.object.image.url }}">
+        {{ result.object.title }}
+    </a>
+</p>
+{% empty %}
+<p>There are no results for your query.</p>
+</div>
+{% endfor %}
+{{ pages.current_start_index }}-{{ pages.current_end_index }} of
+{{ pages.total_count }}
+{{ pages.get_rendered }}
+{% endif %}
+{% endblock %}

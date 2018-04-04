@@ -6,14 +6,8 @@
 {% block content %}
 <section>
 <p>Admin Dashboard</p>
-<form action="/backend/search/" method="get" class="search-form">
-{{ form.as_table }}
-<input type="submit" value="Search">
-</form>
-
 {% if user.is_authenticated %}
 <p>{{ user.get_username }} is logged in.</p>
-
 <style>
 table {
     font-family: arial, sans-serif;

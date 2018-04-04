@@ -24,6 +24,8 @@ class PinForm(ModelForm):
         super(PinForm, self).__init__(*args, **kwargs)
         self.fields['image'].required = False
 
+class SearchForm(forms.Form):
+    search = forms.CharField()
 
 class DataForm(Form):
     data_file = FileField()

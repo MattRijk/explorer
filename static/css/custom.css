@@ -195,6 +195,7 @@ button {
 
 }
 
+
 #nav-search { display:none; }
 
 .search-form {
@@ -539,6 +540,8 @@ button {
 .image-result-text { font-size: 10px; }
 
 .add-item{ float:right; }
+
+.pin-result-item { margin: 0px; }
 
 label[for="id_search"] { display: none;}
 

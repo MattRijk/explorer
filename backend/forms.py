@@ -19,5 +19,3 @@ class CreateUserForm(UserCreationForm):
     def clean_password(self):
         return ""
 
-class SearchForm(forms.Form):
-    search = forms.CharField()

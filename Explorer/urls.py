@@ -11,7 +11,8 @@ urlpatterns = [
     url(r'^categories/$', view=category_list, name='category_list'),
     url(r'^backend/', include('backend.urls', namespace='backend')),
     url(r'^', include('pins.urls', namespace='pins')),
-    url(r'^search/', include('haystack.urls')),
+    url(r'^search/', include('haystack.urls', namespace='haystack')),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
