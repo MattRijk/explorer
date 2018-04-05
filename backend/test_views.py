@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth.models import User
 from pins.models import Category, Pin
-from Explorer.settings import BASE_DIR
+from explorer.settings import BASE_DIR
 
 IMAGE_TEST_PATH = ''.join([BASE_DIR, '/ImageTest/images/'])
 CATEGORY_IMAGE_TEST_PATH = ''.join([BASE_DIR,'/ImageTest/categories/'])

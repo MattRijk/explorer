@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from pins.forms import CategoryForm, PinForm
 from pins.models import Category
-from Explorer.settings import BASE_DIR
+from explorer.settings import BASE_DIR
 
 IMAGE_TEST_PATH = ''.join([BASE_DIR, '/ImageTest/images/'])
 CATEGORY_IMAGE_TEST_PATH = ''.join([BASE_DIR,'/ImageTest/categories/'])
