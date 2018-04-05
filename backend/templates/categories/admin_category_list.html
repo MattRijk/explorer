@@ -1,7 +1,6 @@
 <div>
-    <a href="{% url 'backend:index' %}">backend</a><br>
-    <b>Categories</b>
-    <a href="{% url 'backend:createCategory' %}">Create Category</a>
+    <a href="{% url 'backend:index' %}">Dashboard</a><br>
+   <p><b>Categories</b></p>
     {% for category in categories %}
         <div>
             <a href='{% url "pins:category_detail" category.slug %}'>{{ category.title }}</a>

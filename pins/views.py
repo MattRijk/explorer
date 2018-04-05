@@ -20,6 +20,8 @@ def create_category(request):
     if form.is_valid():
         form.save()
         return redirect('backend:admin_category_list')
+    else:
+        form = CategoryForm()
     return render(request, template_name='categories/category_form.html', context={'form':form})
 
 @login_required(login_url="/login/")
@@ -56,6 +58,8 @@ def create_pin(request):
     if form.is_valid():
         form.save()
         return redirect('backend:pins_list')
+    else:
+        form = PinForm()
     return render(request, template_name='pins/pins_form.html', context={'form':form})
 
 @login_required(login_url="/login/")

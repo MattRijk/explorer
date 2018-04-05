@@ -94,7 +94,7 @@ main {
 }
 .content{
    width: 85%;
-   margin: 5px 0px;
+   margin: 5px 0px 5px 30px;
    display:flex;
    flex-direction:row;
    justify-content: space-evenly;
@@ -447,6 +447,9 @@ input[type=number] {
     border: 1px solid #000;
 }
 
+/* forms */
+
+
 button {
     background-color: black;
     color: white;
@@ -536,6 +539,10 @@ button {
     font-size: 12px;
 }
 
+.form-submit { background-color: blue; }
+
+
+
 .image-result { width: 8%; }
 .image-result-text { font-size: 10px; }
 
@@ -544,6 +551,8 @@ button {
 .pin-result-item { margin: 0px; }
 
 label[for="id_search"] { display: none;}
+
+
 
 .button secondaryAction{margin-right: 10px;}
 

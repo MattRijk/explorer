@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block content %}
-<a href="{% url 'backend:index' %}">backend</a><br>
+<a href="{% url 'backend:index' %}">Dashboard</a><br>
 {% load el_pagination_tags %}
 
 {% paginate pins %}{% get_pages %}
 {% for pin in pins %}
 <div>
-    <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}" width="10%" height="20%">
+    <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}">
         {{ pin.title|truncatewords:8}}</a>
     <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a>
     <a href="{% url 'backend:deletePins' slug=pin.slug %}">Delete</a>

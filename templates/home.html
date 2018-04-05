@@ -4,7 +4,7 @@
 {% block content %}
     <div class="homepage-content">
         {% for category in categories %}
-        <a href="" class="item-title">
+        <a href="{% url 'pins:category_detail' category.slug %}" class="item-title">
             <img class="item-image" src="{{ category.image.url }}">
             <br>{{ category.title }}
             <br><span>{{ category.pin_set.all.count }} Images</span>
@@ -16,5 +16,4 @@
         most viewed
         newest images
     </div>
-
 {% endblock %}

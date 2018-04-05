@@ -1,11 +1,12 @@
 import io
 import csv
 from django import forms
-from django.forms import ModelForm, ModelChoiceField, Select, Form, FileField
+from django.forms import ModelForm, ModelChoiceField, Select, Form, FileField, TextInput
 from pins.models import Category, Pin
 
 
 class CategoryForm(ModelForm):
+
     class Meta:
         model = Category
         fields = ('title','image','description')
@@ -14,7 +15,9 @@ class CategoryForm(ModelForm):
         super(CategoryForm, self).__init__(*args, **kwargs)
         self.fields['image'].required = False
 
+
 class PinForm(ModelForm):
+
     class Meta:
         model = Pin
         category = ModelChoiceField(queryset=Category.objects.all().distinct(),widget=Select())
