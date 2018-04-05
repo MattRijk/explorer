@@ -4,7 +4,7 @@
 
 <article>
 {% for category in categories %}
-    <div>
+    <div class="category-list">
         <a href="{% url 'pins:category_detail' category.slug %}">{{ category.title }}</a>
     </div>
 {% endfor %}

@@ -4,21 +4,18 @@
 {% block content %}
 {% load el_pagination_tags %}
 {% paginate pins %}{% get_pages %}
+<div class="list-items">
 {% for pin in pins %}
-<div class="pin-item">
-<a href="{{ pin.get_image_url }}">
-    <img class="pin-image" src="{{ pin.image.url }}"/>
-    <br><div>{{ pin.title|truncatechars:142 }}</div>
-</a>
-</div>
+    <div class="pin-item">
+        <a href="{{ pin.get_image_url }}">
+            <img class="pin-image" src="{{ pin.image.url }}"/>
+            <br><div>{{ pin.title|truncatechars:142 }}</div>
+        </a>
+    </div>
 {% endfor %}
-
-
+</div>
 <div class="pagination">
-<object>
-  {{ pages.current_start_index }}-{{ pages.current_end_index }} of
-    {{ pages.total_count }}</object>
-    {{ pages.get_rendered }}
-
+  {{ pages.current_start_index }}-{{ pages.current_end_index }} of {{ pages.total_count }}
+  {{ pages.get_rendered }}
 </div>
 {% endblock %}

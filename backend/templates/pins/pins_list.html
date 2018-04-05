@@ -6,14 +6,16 @@
 {% load el_pagination_tags %}
 
 {% paginate pins %}{% get_pages %}
+<div class="list-items">
 {% for pin in pins %}
-<div>
-    <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}">
-        {{ pin.title|truncatewords:8}}</a>
-    <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a>
-    <a href="{% url 'backend:deletePins' slug=pin.slug %}">Delete</a>
-</div>
+    <div class="pin-item">
+        <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}">
+            {{ pin.title|truncatewords:8}}</a>
+        <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a>
+        <a href="{% url 'backend:deletePins' slug=pin.slug %}">Delete</a>
+    </div>
 {% endfor %}
+</div>
 {{ pages.current_start_index }}-{{ pages.current_end_index }} of
 {{ pages.total_count }}
 {{ pages.get_rendered }}

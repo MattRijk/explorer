@@ -3,11 +3,12 @@
 <article class="pin-detail-container">
     <div class="pin-detail">
         <div class="pin-detail-image">
-            <img class="pin-image" src="{{ pin.image.url }}" >
+           <img class="pin-image" src="{{ pin.image.url }}" title="{{ pin.source }}">
             <p>{{ pin.note }}
                 {% if pin.tags.all|length > 0 %}
                 #{{ pin.tags.all|join:", #"}}
                 {% endif %}
+                <a href="{{ pin.source }}" class="image-source">Image Source Link</a>
             </p>
         </div>
     </div>

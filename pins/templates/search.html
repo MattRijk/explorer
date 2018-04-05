@@ -13,6 +13,10 @@
     <a href="{{ result.object.get_image_url }}" class="image-result-text">
         <img class="image-result" src="{{ result.object.image.url }}">
         {{ result.object.title }}
+        {% if user.is_authenticated %}
+        <a href="{% url 'backend:editPins' slug=result.object.slug %}">Edit</a>
+        <a href="{% url 'backend:deletePins' slug=result.object.slug  %}">Delete</a>
+        {% endif %}
     </a>
 </p>
 {% empty %}
