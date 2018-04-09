@@ -213,6 +213,7 @@ button {
     width: 95%;
     margin: 5px;
     font-size: 10px;
+    border-radius: 5px;
 }
 
 .image-source {
@@ -231,6 +232,8 @@ button {
     margin-top:5px;
     border: .5px solid grey;
 }
+
+#category-title p { font-size:10px; }
 
 .category-list {
     border: .5px solid #bdbdbd;
@@ -486,7 +489,7 @@ a.item-title:hover {
     color: #d2d2d2;
 }
 .content span {
-    font-size: 18px;
+    font-size: 8px;
 }
 
 .hamburger{
@@ -581,11 +584,14 @@ button {
 }
 
 .category-list {
-    border: .5px solid #bdbdbd;
+    /*border: .5px solid #bdbdbd;*/
     margin: 8px;
     padding: 5px;
     text-align: center;
+    font-weight: 600;
 }
+
+.category-list a { color: black; }
 
 .list-items {
     display: flex;
@@ -593,6 +599,8 @@ button {
     flex-wrap: wrap;
     justify-content: center;
 }
+
+#admin-link { font-size:10px; }
 
 .pin-detail-container {
     display: flex;
@@ -611,9 +619,7 @@ button {
     margin: 10px;
 }
 
-
 .pin-detail p { font-size: 12px;}
-
 
 .pin-item {
    display:flex;
@@ -625,6 +631,8 @@ button {
    margin: 3px;
    border: .5px solid #d6d6d6;
 }
+
+.pin-form { background-color: grey; }
 
 .image-source {
     margin-left: 20px;
@@ -639,7 +647,10 @@ button {
 .pin-image {
     width: 95%;
     font-size: 10px;
+    border-radius: 5px;
 }
+
+#edit-pins { font-size: 10px; }
 
 #category-title {
     margin-left: 5px;
@@ -649,7 +660,7 @@ button {
 
 #category-title  p {
     margin: 0px;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .form-submit { background-color: blue; }

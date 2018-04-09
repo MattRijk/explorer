@@ -4,15 +4,16 @@
 {% block content %}
 <a href="{% url 'backend:index' %}">Dashboard</a><br>
 {% load el_pagination_tags %}
-
 {% paginate pins %}{% get_pages %}
 <div class="list-items">
 {% for pin in pins %}
     <div class="pin-item">
-        <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}">
+        <a href="{{ pin.get_image_url }}"><img class="pin-image" src="{{ pin.image.url }}" alt="{{ pin.alt_tag }}">
             {{ pin.title|truncatewords:8}}</a>
+        {% if user.is_authenticated %}
         <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a>
         <a href="{% url 'backend:deletePins' slug=pin.slug %}">Delete</a>
+        {% endif %}
     </div>
 {% endfor %}
 </div>

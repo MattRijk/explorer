@@ -15,7 +15,6 @@ def index(request):
     context = {'superUsers':superUsers,
                'activeUsers':activeUser,
                'categories':categories}
-
     return render(request, template_name='index.html', context=context)
 
 @login_required(login_url="/accounts/login/")

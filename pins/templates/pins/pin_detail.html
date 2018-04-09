@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if user.is_authenticated %}
+<a href="{% url 'backend:index' %}" id="admin-link">Admin Dashboard</a>
+{% endif %}
 <article class="pin-detail-container">
     <div class="pin-detail">
         <div class="pin-detail-image">
@@ -9,6 +12,13 @@
                 #{{ pin.tags.all|join:", #"}}
                 {% endif %}
                 <a href="{{ pin.source }}" class="image-source">Image Source Link</a>
+
+                {% if user.is_authenticated %}
+                <div id="edit-pins">
+                    <a href="{% url 'backend:editPins' slug=pin.slug %}">Edit</a>
+                    <a href="{% url 'backend:deletePins' slug=pin.slug  %}">Delete</a>
+                </div>
+                {% endif %}
             </p>
         </div>
     </div>

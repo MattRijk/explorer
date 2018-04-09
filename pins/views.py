@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from pins.forms import CategoryForm, PinForm, DataForm, SearchForm
 from pins.models import Category, Pin
@@ -82,23 +83,30 @@ def delete_pin(request, slug):
     return render(request, 'pins/pin_delete.html', {'object':slug})
 
 def category_detail(request, slug):
-    category = get_object_or_404(Category, slug=slug)
-    pins = category.pin_set.all()
+    try:
+        category = get_object_or_404(Category, slug=slug)
+    except Category.MultipleObjectsReturned:
+        category = Category.objects.filter(slug=slug).order_by('-published').first()
+    pins = category.pin_set.order_by('-published')
     return render(request, 'categories/category_detail.html', {'category':category, 'pins':pins})
 
 def pin_detail(request, **kwargs):
-    category = get_object_or_404(Category, slug=kwargs.get('category'))
-    pin = get_object_or_404(Pin, slug=kwargs.get('slug'))
+    try:
+        category = get_object_or_404(Category, slug=kwargs.get('category'))
+        pin = get_object_or_404(Pin, slug=kwargs.get('slug'))
+    except Pin.MultipleObjectsReturned:
+        pin = Pin.objects.filter(slug=kwargs.get('slug')).order_by('-published').first()
     return render(request=request, template_name='pins/pin_detail.html', context={'pin':pin, 'category': category})
 
 def all_images(request):
-    import random
-    pins = sorted(Pin.objects.all(), key=lambda x: random.random())
-
+    pins = Pin.objects.order_by('?') # random
     return render(request, 'pins/all_images.html', {'pins':pins})
 
 def pin_image(request, slug):
-    pin = get_object_or_404(Pin, slug=slug)
+    try:
+        pin = get_object_or_404(Pin, slug=slug)
+    except Pin.MultipleObjectsReturned:
+        pin = Pin.objects.filter(slug=slug).order_by('-published').first()
     return render(request, 'pins/pin_detail.html', {'pin':pin})
 
 class DataFormView(FormView):
@@ -120,7 +128,7 @@ def search(request):
             cleaned = form.cleaned_data
             if cleaned['search'].lower() == 'amsterdam':
                 results = ''
-                # possibly return message about searching for amsterdam
+                messages.warning(request, 'Returned too many results.')
             else:
                 results = SearchQuerySet().filter(content=cleaned['search']).load_all()
                 total_count = results.count()

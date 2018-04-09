@@ -30,6 +30,7 @@ class Category(models.Model):
 class Pin(models.Model):
     title = models.CharField(max_length=500) # abbreviated note
     image = models.ImageField(upload_to='images/')
+    #alt_tag = models.CharField(max_length=10, blank=True)
     slug = models.SlugField(max_length=1000, blank=True, unique=False)
     note = models.TextField(max_length=500, blank=False)
     source = models.URLField(blank=False)

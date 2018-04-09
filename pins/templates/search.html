@@ -8,19 +8,27 @@
 <p><b>Found: {{ total_count }}</b></p>
 {% load el_pagination_tags %}
 {% paginate results %}{% get_pages %}
+<div class="list-items">
 {% for result in results %}
-<p class="pin-result-item">
-    <a href="{{ result.object.get_image_url }}" class="image-result-text">
-        <img class="image-result" src="{{ result.object.image.url }}">
-        {{ result.object.title }}
+<div class="pin-item">
+        <a href="{{ result.object.get_image_url }}"><img class="pin-image" src="{{ result.object.image.url }}" alt="">
+            {{ result.object.title |truncatewords:8}}</a>
         {% if user.is_authenticated %}
         <a href="{% url 'backend:editPins' slug=result.object.slug %}">Edit</a>
         <a href="{% url 'backend:deletePins' slug=result.object.slug  %}">Delete</a>
         {% endif %}
     </a>
-</p>
+
+</div>
 {% empty %}
+{% if messages %}
+    {% for message in messages %}
+     <p>{{ message }}</p>
+    {% endfor %}
+{% else %}
 <p>There are no results for your query.</p>
+{% endif %}
+</div>
 </div>
 {% endfor %}
 {{ pages.current_start_index }}-{{ pages.current_end_index }} of
