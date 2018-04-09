@@ -11,9 +11,17 @@
         </a>
         {% endfor %}
     </div>
-
-    <div class="homepage-content-2">
-        most viewed
-        newest images
+<div class="homepage-content">
+<h5>Recent Images</h5>
+<div class="list-items">
+{% for pin in latest_pins %}
+    <div class="pin-item">
+        <a href="{{ pin.get_image_url }}">
+            <img class="pin-image" src="{{ pin.image.url }}"/>
+            <br><div>{{ pin.title|truncatechars:142 }}</div>
+        </a>
     </div>
+{% endfor %}
+</div>
+</div>
 {% endblock %}

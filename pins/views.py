@@ -1,3 +1,4 @@
+from random import shuffle
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,7 +10,12 @@ from haystack.query import SearchQuerySet
 
 def home_page(requests):
     categories = Category.objects.all()
-    return render(requests, template_name='home.html', context={'categories': categories})
+    latest_pins = Pin.objects.order_by('-published')[:100]
+    print(type(latest_pins))
+    return render(requests, template_name='home.html', context={
+        'categories': categories,
+        'latest_pins':latest_pins
+    })
 
 def category_list(request):
     categories = Category.objects.all()
@@ -17,23 +23,23 @@ def category_list(request):
 
 @login_required(login_url="/login/")
 def create_category(request):
-    form = CategoryForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
+    formset = CategoryForm(request.POST, request.FILES)
+    if formset.is_valid():
+        formset.save()
         return redirect('backend:admin_category_list')
     else:
-        form = CategoryForm()
-    return render(request, template_name='categories/category_form.html', context={'form':form})
+        formset = CategoryForm()
+    return render(request, template_name='categories/category_form.html', context={'formset':formset})
 
 @login_required(login_url="/login/")
 def edit_category(request, slug):
     category = get_object_or_404(Category, slug=slug)
-    form = CategoryForm(request.POST or None, request.FILES or None,  instance=category)
-    if form.is_valid():
-        edit = form.save(commit=False)
+    formset = CategoryForm(request.POST or None, request.FILES or None,  instance=category)
+    if formset.is_valid():
+        edit = formset.save(commit=False)
         edit.save()
         return redirect('backend:admin_category_list')
-    return render(request, template_name='categories/category_form.html', context={'form':form})
+    return render(request, template_name='categories/category_form.html', context={'formset':formset})
 
 @login_required(login_url="/login/")
 def delete_category(request, slug):
@@ -55,24 +61,24 @@ def pins_list(request):
 
 @login_required(login_url="/login/")
 def create_pin(request):
-    form = PinForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
+    formset = PinForm(request.POST, request.FILES)
+    if formset.is_valid():
+        formset.save()
         return redirect('backend:pins_list')
     else:
-        form = PinForm()
-    return render(request, template_name='pins/pins_form.html', context={'form':form})
+        formset = PinForm()
+    return render(request, template_name='pins/pins_form.html', context={'formset':formset})
 
 @login_required(login_url="/login/")
 def edit_pin(request, slug):
     pin = get_object_or_404(Pin, slug=slug)
-    form = PinForm(request.POST or None, request.FILES or None,  instance=pin)
-    if form.is_valid():
-        edit = form.save(commit=False)
+    formset = PinForm(request.POST or None, request.FILES or None,  instance=pin)
+    if formset.is_valid():
+        edit = formset.save(commit=False)
         edit.save()
-        form.save_m2m()
+        formset.save_m2m()
         return redirect('backend:pins_list')
-    return render(request, template_name='pins/pins_form.html', context={'form':form})
+    return render(request, template_name='pins/pins_form.html', context={'formset':formset})
 
 @login_required(login_url="/login/")
 def delete_pin(request, slug):
@@ -117,7 +123,6 @@ class DataFormView(FormView):
     def form_valid(self, form):
         form.process_data()
         return super().form_valid(form)
-
 
 def search(request):
     form = SearchForm()

@@ -191,6 +191,18 @@ button {
 
 }
 
+textarea {
+    border: 1px solid black;
+    width: 100%;
+}
+
+#id_source {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #000;
+}
 
 #nav-search { display:none; }
 
@@ -306,6 +318,22 @@ a.endless_page_link:active {
     background-color: black;
 }
 
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
 footer {
     display: flex;
     flex-direction: column;
@@ -394,6 +422,9 @@ div { color: #000;}
     font-weight: 700;
     color: #fff;
 }
+
+#brand a { color: #fff; }
+
 #brand-span{
     margin: 6px 10px 6px 10px;
     font-size: 7px;
@@ -443,7 +474,7 @@ main {
 }
 .content{
    width: 80%;
-   margin: 5px 0px;
+   margin: 5px;
 }
 
 .sidebar {
@@ -489,7 +520,7 @@ a.item-title:hover {
     color: #d2d2d2;
 }
 .content span {
-    font-size: 8px;
+    font-size: 10px;
 }
 
 .hamburger{
@@ -632,7 +663,7 @@ button {
    border: .5px solid #d6d6d6;
 }
 
-.pin-form { background-color: grey; }
+.latest-image { width: 20%; }
 
 .image-source {
     margin-left: 20px;
@@ -651,6 +682,19 @@ button {
 }
 
 #edit-pins { font-size: 10px; }
+
+textarea {
+    border: 1px solid black;
+    width: 100%;
+}
+
+#id_source {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #000;
+}
 
 #category-title {
     margin-left: 5px;
@@ -727,6 +771,22 @@ a.endless_page_link:active {
     background-color: black;
 }
 
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
 
 #footer {
     background-color: #3b393f;
@@ -754,6 +814,8 @@ a.endless_page_link:active {
      bottom: 8px;
      right: 16px;
 }
+
+
 
 } /** end of min-width 600px */
 

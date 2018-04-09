@@ -1,12 +1,24 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
 <div>
-    <a href="{% url 'backend:index' %}">Dashboard</a><br>
-   <p><b>Categories</b></p>
-    {% for category in categories %}
-        <div>
-            <a href='{% url "pins:category_detail" category.slug %}'>{{ category.title }}</a>
-            <a href="{% url 'backend:editCategory' slug=category.slug %}">Edit</a>
-            <a href="{% url 'backend:deleteCategory' slug=category.slug %}">Delete</a>
-            {{ category.pin_set.all.count }} Images
-        </div>
-    {% endfor %}
+  <a href="{% url 'backend:index' %}">Dashboard</a><br>
 </div>
+<table>
+  <tr>
+    <th> </th>
+    <th> </th>
+    <th> </th>
+    <th> </th>
+  </tr>
+  {% for category in categories %}
+  <tr>
+    <td><a href="{% url 'pins:category_detail' category.slug %}">{{ category.title }}</a></td>
+    <td><a href="{% url 'backend:editCategory' slug=category.slug %}">Edit</a></td>
+    <td><a href="{% url 'backend:deleteCategory' slug=category.slug %}">Delete</a></td>
+    <td>{{ category.pin_set.all.count }} Images</td>
+  </tr>
+    {% endfor %}
+</table>
+{% endblock %}
