@@ -126,6 +126,7 @@ class DataFormView(FormView):
 
 def search(request):
     form = SearchForm()
+    message = ''
     cleaned, results, total_count = None, None, 0
     if 'search' in request.GET:
         form = SearchForm(request.GET)
@@ -133,11 +134,13 @@ def search(request):
             cleaned = form.cleaned_data
             if cleaned['search'].lower() == 'amsterdam':
                 results = ''
-                messages.warning(request, 'Returned too many results.')
+                message = 'Returned too many results.'
             else:
-                results = SearchQuerySet().filter(content=cleaned['search']).load_all()
+                #results = SearchQuerySet().filter(content=cleaned['search']).load_all()
+                results = SearchQuerySet().autocomplete(content_auto=cleaned['search']).load_all()
                 total_count = results.count()
-    return render(request, 'search.html', {'form':form, 'cleaned':cleaned, 'results':results, 'total_count': total_count})
+    return render(request, 'search.html', {'form':form, 'cleaned':cleaned, 'results':results,
+                                           'total_count': total_count, 'message':message})
 
 
 # from django.db.models import Q
@@ -161,7 +164,6 @@ def search(request):
 
 
 # using whoosh with autocomplete
-# def search_titles(request):
 # def search_titles(request):
 #     pins = SearchQuerySet().autocomplete(content_auto=request.POST.get('search_text')).load_all()
 #     return render(request, 'search_form.html', {'pins': pins})
